@@ -1,0 +1,19 @@
+@use './variables' as *;
+
+form {
+    padding: 16px;
+    border-radius: 28px;
+    background-color: $background-card-color;
+}
+
+.submitButton {
+    width: 100%;
+    background-color: $main-color;
+    color: $background-card-color;
+    font-weight: 500;
+    border-radius: 12px;
+
+    &:hover {
+        background-color: rgba($color: $main-color, $alpha: 0.5);
+    }
+}

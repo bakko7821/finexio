@@ -1,0 +1,59 @@
+$rem0_625: clamp(0.5rem, 2vw, 0.625rem);
+$rem0_875: clamp(0.625rem, 2vw, 0.875rem);
+$rem1: clamp(0.875rem, 2vw, 1rem);
+$rem1_5: clamp(1rem, 2vw, 1.5rem);
+
+$background-color: #00011e;
+$background-card-color: #00012d;
+$background-card-hover-color: #00023c;
+$main-color: #6aa8f9;
+$red: #870000;
+$main-text-color: #ffffff;
+$second-text-color: #818181;
+$third-text-color: #adadad;
+
+.flex {
+    display: flex;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+@for $i from 1 through 100 {
+  .g#{$i} {
+    gap: #{$i}px;
+  }
+}
+
+.rem0_625 {
+    font-size: $rem0_625;
+    line-height: 1.5;
+}
+
+.rem0_875 {
+    font-size: $rem0_875;
+    line-height: 1.5;
+}
+
+.rem1 {
+    font-size: $rem1;
+    line-height: 1.5;
+}
+
+.rem1_5 {
+    font-size: $rem1_5;
+    line-height: 1.4;
+}

@@ -1,0 +1,95 @@
+@use './variables' as *;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+#root {
+    overflow: hidden;
+    min-width: 100vw;
+    width: 100vw;
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $background-color;
+
+    main, main .main_content {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+
+button {
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.5s;
+}
+
+button, input, textarea {
+    background-color: transparent;
+    outline: none;
+    border: none;
+}
+
+.floating-input {
+    position: relative;
+    width: 100%;
+    height: auto;
+
+    input, textarea {
+        width: 220px;
+        background-color: transparent;
+        border: 2px $main-color solid;
+        padding: 8px 16px;
+        font-size: $rem1;
+        line-height: 1.5;
+        color: $main-text-color;
+        outline: none;
+        border-radius: 12px;
+
+        &::placeholder {
+            color: transparent;
+        }
+
+        &:placeholder-shown + label {
+            top: 12px;
+            left: 12px;
+            font-size: $rem1;
+            line-height: 1.5;
+            color: $second-text-color;
+        }
+
+        &:focus + label, &:not(:placeholder-shown) + label {
+            display: flex;
+            align-items: center;
+            top: -12px;
+            left: 8px;
+            padding: 2px 4px;
+            background-color: $background-card-color;
+            font-size: $rem0_875;
+            color: $main-color;
+        }
+    }
+
+    label {
+        position: absolute;
+        left: 12px;
+        top: 12px;
+        font-size: $rem0_875;
+        line-height: 1.5;
+        font-weight: 500;
+        color: $second-text-color;
+        pointer-events: none;
+        padding: 0 4px;
+        transition: 0.2s ease all;
+    }
+}
+

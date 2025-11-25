@@ -40,3 +40,8 @@ npm install -D concurrently
 1. React-Router-Dom: npm install react-router-dom 
 2. Axios: npm install axios
 3. Redux Toolkin: npm install @reduxjs/toolkit
+
+# commit 1.2.0
+
+- Создана архитектура
+- Свёрстаны страницы LoginPage.tsx и RegisterPage.tsx
