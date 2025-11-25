@@ -45,3 +45,8 @@ npm install -D concurrently
 
 - Создана архитектура
 - Свёрстаны страницы LoginPage.tsx и RegisterPage.tsx
+
+# commit 2.2.0
+
+- Создано подключение к базе данных через Prisma
+- Починить сервис авторизации
