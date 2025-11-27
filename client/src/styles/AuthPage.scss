@@ -4,6 +4,24 @@ form {
     padding: 16px;
     border-radius: 28px;
     background-color: $background-card-color;
+
+    .headerText {
+        font-weight: 500;
+        color: $main-text-color;
+    }
+
+    .linksBox {
+        width: 100%;
+
+        a {
+            color: $main-color;
+            transition: color 0.5s;
+
+            &:hover {
+                color: rgba($color: $main-color, $alpha: 0.5);
+            }
+        }
+    }
 }
 
 .submitButton {

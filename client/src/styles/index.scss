@@ -39,13 +39,19 @@ button, input, textarea {
     border: none;
 }
 
+a {
+    text-transform: none;
+    text-decoration: none;
+}
+
 .floating-input {
     position: relative;
     width: 100%;
     height: auto;
 
     input, textarea {
-        width: 220px;
+        width: 100%;
+        min-width: 220px;
         background-color: transparent;
         border: 2px $main-color solid;
         padding: 8px 16px;

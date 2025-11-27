@@ -1,14 +1,29 @@
-export interface CreateUserDTO {
-  username: string;
-  email: string;
-  password: string;
+import { Table, Column, Model, DataType } from "sequelize-typescript";
+
+@Table({
+  tableName: "users",
+  timestamps: true,
+})
+
+export class User extends Model {
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: true,
+  })
+  username!: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+    unique: true,
+  })
+  email!: string;
+
+  @Column({
+    type: DataType.STRING,
+    allowNull: false,
+  })
+  password!: string;
 }
 
-export interface User {
-  id: number;
-  username: string;
-  email: string;
-  balance: number;
-  createdAt: Date;
-  updatedAt: Date;
-}

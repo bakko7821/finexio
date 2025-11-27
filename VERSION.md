@@ -50,3 +50,19 @@ npm install -D concurrently
 
 - Создано подключение к базе данных через Prisma
 - Починить сервис авторизации
+
+# commit 3.3.0
+
+### Серверная часть
+- Из проекта удалена Prisma и Prisma-client
+- Установлен sequelize
+```
+npm install sequelize pg pg-hstore
+npm install --save-dev @types/node @types/express @types/jsonwebtoken
+npm install sequelize-typescript
+```
+- Созданы эндпоинты для авторизации
+
+### Клиентская часть
+
+- Созданы axios запросы на авторизацию и регистрацию

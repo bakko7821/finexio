@@ -20,6 +20,9 @@
     "multer": "^2.0.2",
     "path": "^0.12.7",
     "pg": "^8.16.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.37.7",
+    "sequelize-typescript": "^2.1.6",
     "zod": "^4.1.13"
   },
   "devDependencies": {
@@ -32,7 +35,6 @@
     "concurrently": "^9.2.1",
     "node-gyp": "^12.1.0",
     "nodemon": "^3.1.11",
-    "prisma": "^6.19.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }

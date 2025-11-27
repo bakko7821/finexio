@@ -2,6 +2,7 @@ $rem0_625: clamp(0.5rem, 2vw, 0.625rem);
 $rem0_875: clamp(0.625rem, 2vw, 0.875rem);
 $rem1: clamp(0.875rem, 2vw, 1rem);
 $rem1_5: clamp(1rem, 2vw, 1.5rem);
+$rem2: clamp(1.8rem, 2vw, 2rem);
 
 $background-color: #00011e;
 $background-card-color: #00012d;
@@ -56,4 +57,9 @@ $third-text-color: #adadad;
 .rem1_5 {
     font-size: $rem1_5;
     line-height: 1.4;
+}
+
+.rem2 {
+    font-size: $rem2;
+    line-height: 1.3;
 }
