@@ -66,3 +66,8 @@ npm install sequelize-typescript
 ### Клиентская часть
 
 - Созданы axios запросы на авторизацию и регистрацию
+
+# commit 3.4.0
+
+- Стилизован и заполнен контентом компонент **Navigate.tsx**
+- Создан файл **/style/navigate.scss**

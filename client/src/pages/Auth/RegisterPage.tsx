@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { FloatingInput } from '../../components/UX-UI/FloatingInput'
 import '../../styles/AuthPage.scss'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 export const RegisterPage = () => {
     const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const navigate = useNavigate()
 
     const handleSubmitRegisterForm = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -36,6 +37,8 @@ export const RegisterPage = () => {
             console.log("Успех:", res.data);
             localStorage.setItem("token", res.data.token)
 
+            navigate('/dashboard')
+
         } catch (err: any) {
             console.log("Ошибка авторизации:", err.response?.data);
         }
@@ -52,7 +55,7 @@ export const RegisterPage = () => {
                     <Link to={"/auth/login"}>Уже есть аккаунт</Link>
                 </div>
                 <button type="submit" className="submitButton flex-center rem1">
-                    Войти в аккаунт
+                    Создать аккаунт
                 </button>
             </form>
         </div>

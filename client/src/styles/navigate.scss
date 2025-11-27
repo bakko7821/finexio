@@ -1,0 +1,55 @@
+@use './variables' as *;
+
+nav {
+    padding: 12px;
+    min-width: 370px;
+    width: 370px;
+    height: 100%;
+    background-color: $background-card-color;
+
+    a, button {
+        transition: all 0.5s;
+        padding: 8px 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: $third-text-color;
+        align-items: center;
+        width: 100%;
+        font-weight: 600;
+        font-size: $rem1;
+        line-height: 1.5;
+        background-color: transparent;
+        border-radius: 12px;
+
+        &:hover {
+             background-color: rgba($color: $main-color, $alpha: 0.3);
+            svg {
+                transform: rotate(-30deg);
+            }
+        }
+    }
+
+    a.active {
+        background-color: $main-color;
+        color: $background-card-color;
+    }
+
+    .logOutButton {
+        color: $red;
+
+        &:hover {
+            background-color: rgba($color: $red, $alpha: 0.3);
+        }
+    }
+
+    .bottomLinksBox {
+        button {
+            color: $second-text-color;
+
+            &:hover {
+                background-color: rgba($color: $second-text-color, $alpha: 0.3);
+            }
+        }
+    }
+}

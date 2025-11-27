@@ -22,7 +22,7 @@ export const LoginPage = () => {
             console.log("Успех:", res.data);
             localStorage.setItem("token", res.data.token)
             
-            navigate('/')
+            navigate('/dashboard')
 
         } catch (err: any) {
             console.log("Ошибка авторизации:", err.response?.data);
