@@ -38,6 +38,8 @@ async function startServer() {
     await sequelize.sync({ alter: true });
     console.log("All Models synchronized");
 
+    console.log("loaded models:", sequelize.models);
+
     const PORT = process.env.PORT || 5000;
 
     app.listen(PORT, () => {

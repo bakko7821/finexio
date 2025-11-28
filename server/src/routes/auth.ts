@@ -26,7 +26,8 @@ router.post("/register", async (req, res) => {
     const user = await User.create({ username, email, password: hash });
 
     return res.json({ message: "Регистрация успешна", user });
-  } catch (error) {
+  } catch (error: unknown) {
+    console.error(error)
     res.status(500).json({ error });
   }
 });
@@ -51,8 +52,9 @@ router.post("/login", async (req, res) => {
         { expiresIn: "24h" }
     );
 
-    return res.json({ token });
-  } catch (error) {
+    return res.json({ token, user });
+  } catch (error: unknown) {
+    console.error(error)
     res.status(500).json({ error });
   }
 });

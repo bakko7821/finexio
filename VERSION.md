@@ -71,3 +71,8 @@ npm install sequelize-typescript
 
 - Стилизован и заполнен контентом компонент **Navigate.tsx**
 - Создан файл **/style/navigate.scss**
+
+# commit 4.4.0
+
+- Создана модель транзакции **/models/Transaction.ts**
+- Созданы POST и GET эндпоинты на получение задач **/routes/trasnsactions.ts**
