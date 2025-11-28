@@ -26,6 +26,10 @@
     }
 }
 
+h1, h2, h3, h4, p, span, label {
+    color: $main-text-color;
+}
+
 
 button {
     padding: 8px 16px;

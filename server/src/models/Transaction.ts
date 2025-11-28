@@ -1,4 +1,5 @@
-import { Table, Column, Model, DataType } from "sequelize-typescript";
+import { Table, Column, Model, DataType, BelongsTo } from "sequelize-typescript";
+import { Category } from "./Category";
 
 @Table({
   tableName: "transactions",
@@ -24,10 +25,10 @@ export class Transaction extends Model {
   })
   name!: string;
 
-  @Column({
-    type: DataType.INTEGER,
-    allowNull: false,
-  })
+  @BelongsTo(() => Category)
+  category!: Category;
+
+  @Column
   categoryId!: number;
 
   @Column({
