@@ -15,7 +15,7 @@ export const Navigate = () => {
                 <NavLink to={'/dashboard'}><GraphIcon/> Панель</NavLink>
                 <NavLink to={'/account'}><UserIcon/> Аккаунт</NavLink>
                 <NavLink to={'/fincance'}><MoneyBagIcon/> Финансы</NavLink>
-                <NavLink to={'/transaction'}><TransactionIcon/> Транзакции</NavLink>
+                <NavLink to={'/transactions'}><TransactionIcon/> Транзакции</NavLink>
                 <button className="logOutButton" onClick={() => handleLogOut()}><LogOutIcon/> Выйти</button>
             </div>
             <div className="bottomLinksBox flex-column g8">

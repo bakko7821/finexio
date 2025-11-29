@@ -18,7 +18,7 @@ function App() {
       <Route element={<MainLayout />}>
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/account" element={<AccountPage />} />
-        <Route path="/transaction" element={<TransactionPage />} />
+        <Route path="/transactions" element={<TransactionPage />} />
       </Route>
     </Routes>
   )

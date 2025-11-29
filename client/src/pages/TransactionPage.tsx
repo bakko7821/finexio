@@ -1,12 +1,22 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import "../styles/TransactionPage.scss"
+import { AddIcon } from "../assets/icons";
+import { TransactionComponent } from "../components/TransactionComponent";
 
 export interface Transaction {
+    id: number
     icon: string;
     name: string;
     categoryId: number;
+    category: Category;
     count: number;
     createdAt: string;
+}
+
+export interface Category {
+    id: number;
+    name: string;
 }
 
 export const TransactionPage = () => {
@@ -35,24 +45,26 @@ export const TransactionPage = () => {
 
         return date.toLocaleDateString("ru-RU", {
             month: "long",
-            // year: "numeric"
         });
     }
 
     return (
-        <div className="main_content transaction">
-            {months.map((month) => (
-                <div key={month}>
-                    <h2>{formatMonth(month)}</h2>
-
-                    {transactionList[month].map((t, index) => (
-                        <div key={index}>
-                            <p>{t.name}</p>
-                            <p>{t.count}</p>
-                        </div>
-                    ))}
-                </div>
-            ))}
+        // <div className="main_content transaction">
+        //     
+        // </div>
+        <div className="main_content transactions flex-column g16">
+            <button className="addTransactionButton flex-center"><AddIcon/></button>
+            <span className="titleText">История прошлых транзакций</span>
+            <div className="allTransactionsList flex-column g12">
+                {months.map((month) => (
+                    <div className="monthTransactionList flex-column g8" key={month}>
+                        <span className="monthName">{formatMonth(month)}</span>
+                        {transactionList[month].map((transaction) => (
+                            <TransactionComponent transaction={transaction} />
+                        ))}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

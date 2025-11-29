@@ -1,1 +1,23 @@
 @use './variables' as *;
+
+.main_content.transactions {
+    .addTransactionButton {
+        position: fixed;
+        bottom: 16px;
+        right: 16px;
+
+        svg {
+            width: 36px;
+            height: 36px;
+        }
+
+        color: $background-card-color;
+        background-color: $main-color;
+        padding: 8px;
+        border-radius: 100%;
+    }
+
+    .transaction {
+        
+    }
+}
