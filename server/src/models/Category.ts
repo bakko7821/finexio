@@ -14,6 +14,12 @@ export class Category extends Model {
     })
     name!: string;
 
+    @Column({
+      type: DataType.STRING,
+      allowNull: false,
+    })
+    icon!: string;
+
     @HasMany(() => Transaction)
     transactions!: Transaction[];
 }

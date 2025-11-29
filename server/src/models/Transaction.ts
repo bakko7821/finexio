@@ -16,12 +16,6 @@ export class Transaction extends Model {
     type: DataType.STRING,
     allowNull: false,
   })
-  icon!: string;
-
-  @Column({
-    type: DataType.STRING,
-    allowNull: false,
-  })
   name!: string;
 
   @ForeignKey(() => Category)

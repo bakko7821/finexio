@@ -99,3 +99,13 @@ npm install sequelize-typescript
 ### Клиентская часть
 
 - Создан компонент **/components/TransactionComponent.tsx**
+
+# commit 6.6.0
+
+### Серверная часть
+
+- Небольшие изменения
+
+### Клиентская часть
+
+- Стилизована страница **TransactionPage.tsx**

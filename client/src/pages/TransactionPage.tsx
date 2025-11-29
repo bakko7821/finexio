@@ -6,7 +6,6 @@ import { TransactionComponent } from "../components/TransactionComponent";
 
 export interface Transaction {
     id: number
-    icon: string;
     name: string;
     categoryId: number;
     category: Category;
@@ -17,6 +16,7 @@ export interface Transaction {
 export interface Category {
     id: number;
     name: string;
+    icon: string;
 }
 
 export const TransactionPage = () => {
@@ -54,11 +54,15 @@ export const TransactionPage = () => {
         // </div>
         <div className="main_content transactions flex-column g16">
             <button className="addTransactionButton flex-center"><AddIcon/></button>
-            <span className="titleText">История прошлых транзакций</span>
+            <span className="titleText rem1_5">История прошлых транзакций</span>
             <div className="allTransactionsList flex-column g12">
                 {months.map((month) => (
                     <div className="monthTransactionList flex-column g8" key={month}>
-                        <span className="monthName">{formatMonth(month)}</span>
+                        <div className="mounthNameBox flex-center g16">
+                            <span className="plug"></span>
+                            <span className="monthName">{formatMonth(month)}</span>
+                            <span className="plug"></span>
+                        </div>
                         {transactionList[month].map((transaction) => (
                             <TransactionComponent transaction={transaction} />
                         ))}

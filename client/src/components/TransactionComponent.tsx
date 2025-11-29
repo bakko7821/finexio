@@ -40,17 +40,19 @@ export const TransactionComponent = ({transaction}: TransactionProps) => {
         <div ref={transactionRef} className="transaction flex-column g4" key={transaction.id} onClick={() => handleHideMenu()}>
             <div className="transactionContent flex-between">
                 <div className="transactionInfo flex g8">
-                    {transaction.icon ? (<img src={`http://localhost:5000${transaction.icon}`}/>) : null}
+                    {transaction.category.icon ? (<span className="transactionIcon rem2">{transaction.category.icon}</span>) : null}
                     <div className="transactionTextInfo flex-column">
-                        <span className="nameText">{transaction.name}</span>
-                        <span className="categoryText">{transaction.category.name}</span>
+                        <span className="nameText rem1">{transaction.name}</span>
+                        <span className="categoryText rem0_875">{transaction.category.name}</span>
                     </div>
                 </div>
-                <span className={`transactionCount ${countClass}`}>{transaction.count}</span>
+                <span className={`transactionCount rem1 ${countClass}`}>{transaction.count} ₽</span>
             </div>
             {isOpen ? (
-                <div className="editTransactionBox">
-
+                <div className="editTransactionBox flex g8">
+                    <button className="editTransactionButton flex-center rem1">Изменить</button>
+                    <span className="circle"></span>
+                    <button className="deleteTransactionButton flex-center rem1">Удалить</button>
                 </div>
             ) : null}
         </div>
