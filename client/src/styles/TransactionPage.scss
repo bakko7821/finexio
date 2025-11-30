@@ -133,5 +133,130 @@
         z-index: 999;
         background-color: rgba($color: #000000, $alpha: 0.3);
         backdrop-filter: blur(6px);
+
+        .formHeader {
+            align-items: center;
+            padding: 0px 8px;
+            margin-bottom: 8px;
+
+            .titleText {
+                color: $second-text-color;
+            }
+
+            button {
+                padding: 0px;
+                transition: all 0.5s;
+                
+                svg {
+                    color: $second-text-color;
+                }
+
+                &:hover {
+                    transform: scale(1.2);
+                    
+                    svg {
+                        color: rgba($color: $second-text-color, $alpha: 0.7);
+                    }
+                }
+            }
+        }
+
+        .newTransactionForm, .categoryForm {
+            min-height: 310px;
+            min-width: 370px;
+            padding: 16px;
+
+            .nameBox, .countBox {
+                padding: 0;
+
+                label {
+                    padding: 0px 8px;
+                }
+
+                input {
+                    color: $main-text-color;
+                    border-radius: 12px;
+                    padding: 8px;
+                    background-color: $background-color;
+
+                    &::placeholder {
+                        color: $second-text-color;
+                    }
+                }
+            }
+
+            .categoryHeader {
+                padding: 0px 8px;
+                width: 100%;
+                align-items: center;
+
+                button {
+                    padding: 0;
+                    transition: all 0.5s;
+
+                    svg {
+                        color: $main-text-color;
+                    }
+
+                    &:hover {
+                        transform: scale(1.2);
+                        
+                        svg {
+                            color: rgba($color: $main-text-color, $alpha: 0.5);
+                        }
+                    }
+                }
+            }
+
+            .buttonsBox {
+                width: 100%;
+
+                button {
+                    font-weight: 500;
+                    transition: all 0.5s;
+                    border-radius: 12px;
+                }
+
+                .addNewTransactionButton {
+                    color: $background-card-color;
+                    width: 100%;
+                    background-color: $main-color;
+
+                    &:hover {
+                        background-color: rgba($color: $main-color, $alpha: 0.5);
+                    }
+                }
+
+                .cancelButton {
+                    color: $red;
+                    
+                    &:hover {
+                        background-color: rgba($color: $red, $alpha: 0.5);
+                    }
+                }
+            }
+
+            .myCategoriesText {
+                padding: 0px 8px;
+            }
+
+            .categoryList {
+                width: 100%;
+                height: 100%;
+                flex: 1;
+            }
+
+            .createCategoryButton {
+                width: 100%;
+                background-color: $background-color;
+                border-radius: 12px;
+                color: $main-text-color;
+                transition: all 0.5s;
+
+                &:hover {
+                    background-color: rgba($color: $main-color, $alpha: 0.5);
+                }
+            }
+        }
     }
 }

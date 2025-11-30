@@ -50,20 +50,22 @@ export const TransactionPage = () => {
         <div className="main_content transactions flex-column g16">
             <button className="addTransactionButton flex-center" onClick={() => dispatch(toggleAddTransaction())}><AddIcon/></button>
             <span className="titleText rem1_5">История прошлых транзакций</span>
-            <div className="allTransactionsList flex-column g12">
-                {months.map((month) => (
-                    <div className="monthTransactionList flex-column g8" key={month}>
-                        <div className="mounthNameBox flex-center g16">
-                            <span className="plug"></span>
-                            <span className="monthName">{formatMonth(month)}</span>
-                            <span className="plug"></span>
+            {months.length > 0 ? (
+                <div className="allTransactionsList flex-column g12">
+                    {months.map((month) => (
+                        <div className="monthTransactionList flex-column g8" key={month}>
+                            <div className="mounthNameBox flex-center g16">
+                                <span className="plug"></span>
+                                <span className="monthName">{formatMonth(month)}</span>
+                                <span className="plug"></span>
+                            </div>
+                            {transactionsByMonth[month].map((transaction) => (
+                                <TransactionComponent key={transaction.id} transaction={transaction} />
+                            ))}
                         </div>
-                        {transactionsByMonth[month].map((transaction) => (
-                            <TransactionComponent key={transaction.id} transaction={transaction} />
-                        ))}
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            ) : (<span className="nullMessage rem1">У вас отсутствуют транзакций</span>)}
             {isOpenAddMenu ? (
                 <AddTransactionDropDownMenu />
             ) : null}

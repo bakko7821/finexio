@@ -6,7 +6,7 @@ const router = Router();
 
 sequelize.addModels([Category]);
 
-router.post("/add", async(req, res) => {
+router.post("/add",  async(req, res) => {
     try {
         const {ownerId, icon, name} = req.body;
 
