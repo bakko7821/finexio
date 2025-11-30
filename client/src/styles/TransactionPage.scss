@@ -114,4 +114,24 @@
             }
         }
     }
+
+    .category {
+        background-color: $background-color;
+        padding: 8px 6px;
+        border-radius: 12px;
+        width: fit-content;
+        
+    }
+
+    .addTransactionMenu {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        background-color: rgba($color: #000000, $alpha: 0.3);
+        backdrop-filter: blur(6px);
+    }
 }

@@ -2,7 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "../styles/TransactionPage.scss"
 import { AddIcon } from "../assets/icons";
-import { TransactionComponent } from "../components/TransactionComponent";
+import { TransactionComponent } from "../components/Transaction/TransactionComponent";
+import { AddTransactionDropDownMenu } from "../components/Transaction/AddTransactionMenu/AddTransactionDropDownMenu";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTransactions } from "../store/slices/transactionSlice";
+import { toggleAddTransaction } from "../store/slices/uiSlice";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 export interface Transaction {
     id: number
@@ -20,24 +25,17 @@ export interface Category {
 }
 
 export const TransactionPage = () => {
-    const userId = Number(localStorage.getItem("userId"));
-
-    const [transactionList, setTransactionList] = useState<Record<string, Transaction[]>>({});
-
-    async function fetchAllTransactions(ownerId: number) {
-        if (!ownerId) return;
-
-        const response = await axios.get(`http://localhost:5000/api/transactions/all/${ownerId}`);
-        const data = response.data;
-
-        setTransactionList(data);
-    }
+    const userId = Number(localStorage.getItem('userId'))
+    const dispatch = useAppDispatch();
+    const transactions = useAppSelector((s) => s.transactions.byMonth);
+    const isOpenAddMenu = useAppSelector((s) => s.ui.isAddTransactionOpen);
 
     useEffect(() => {
-        fetchAllTransactions(userId);
+        dispatch(fetchTransactions(userId));
     }, []);
 
-    const months = Object.keys(transactionList).sort((a, b) => b.localeCompare(a));
+    const transactionsByMonth = useAppSelector((s) => s.transactions.byMonth);
+    const months = Object.keys(transactionsByMonth).sort((a, b) => b.localeCompare(a));
 
     function formatMonth(key: string) {
         const [year, month] = key.split("-");
@@ -49,11 +47,8 @@ export const TransactionPage = () => {
     }
 
     return (
-        // <div className="main_content transaction">
-        //     
-        // </div>
         <div className="main_content transactions flex-column g16">
-            <button className="addTransactionButton flex-center"><AddIcon/></button>
+            <button className="addTransactionButton flex-center" onClick={() => dispatch(toggleAddTransaction())}><AddIcon/></button>
             <span className="titleText rem1_5">История прошлых транзакций</span>
             <div className="allTransactionsList flex-column g12">
                 {months.map((month) => (
@@ -63,12 +58,15 @@ export const TransactionPage = () => {
                             <span className="monthName">{formatMonth(month)}</span>
                             <span className="plug"></span>
                         </div>
-                        {transactionList[month].map((transaction) => (
-                            <TransactionComponent transaction={transaction} />
+                        {transactionsByMonth[month].map((transaction) => (
+                            <TransactionComponent key={transaction.id} transaction={transaction} />
                         ))}
                     </div>
                 ))}
             </div>
+            {isOpenAddMenu ? (
+                <AddTransactionDropDownMenu />
+            ) : null}
         </div>
     );
 };

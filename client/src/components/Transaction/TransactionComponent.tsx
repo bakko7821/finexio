@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { Transaction } from "../pages/TransactionPage"
+import type { Transaction } from "../../pages/TransactionPage"
 
 export interface TransactionProps {
     transaction: Transaction
@@ -50,9 +50,9 @@ export const TransactionComponent = ({transaction}: TransactionProps) => {
             </div>
             {isOpen ? (
                 <div className="editTransactionBox flex g8">
-                    <button className="editTransactionButton flex-center rem1">Изменить</button>
+                    <button className="editTransactionButton flex-center rem0_875">Изменить</button>
                     <span className="circle"></span>
-                    <button className="deleteTransactionButton flex-center rem1">Удалить</button>
+                    <button className="deleteTransactionButton flex-center rem0_875">Удалить</button>
                 </div>
             ) : null}
         </div>

@@ -7,6 +7,11 @@ import { Transaction } from "./Transaction";
 })
 
 export class Category extends Model {
+    @Column({
+      type: DataType.INTEGER,
+      allowNull: false,
+    })
+    ownerId!: number;
   
     @Column({
         type: DataType.STRING,
