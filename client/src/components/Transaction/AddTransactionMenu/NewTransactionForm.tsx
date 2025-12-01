@@ -2,16 +2,19 @@ import { useEffect, useRef, useState } from "react"
 import { AddIcon2, CrossIcon } from "../../../assets/icons"
 import { useAppDispatch, useAppSelector } from "../../../store/hooks"
 import { openCategoryMenu, toggleAddTransaction } from "../../../store/slices/uiSlice"
+import { CategoryComponent } from "../Category/CategoryComponent"
+import { fetchTransactions, postTransactions } from "../../../store/slices/transactionSlice"
 
 export const NewTransactionForm = () => {
+    const userId = Number(localStorage.getItem("userId"))
     const [name, setName] = useState("")
-    const [category, setCategory] = useState("")
     const [count, setCount] = useState("")
 
     const dispatch = useAppDispatch();
     const transactions = useAppSelector((s) => s.transactions.byMonth);
     const isOpenAddMenu = useAppSelector((s) => s.ui.isAddTransactionOpen);
     const isOpen = useAppSelector((s) => s.ui.isAddTransactionOpen);
+    const selectedCategory = useAppSelector(s => s.categories.selectedCategory);
 
     const transactionFormRef = useRef<HTMLFormElement | null>(null);
 
@@ -30,7 +33,41 @@ export const NewTransactionForm = () => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [isOpen, dispatch]);
 
-    return <form ref={transactionFormRef} className="newTransactionForm flex-column g8">
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!name.trim()) {
+            console.log("Название не указано");
+            return;
+        }
+
+        if (!selectedCategory) {
+            console.log("Категория не выбрана");
+            return;
+        }
+
+        if (!count ) {
+            console.log("Неверная сумма");
+            return;
+        }
+
+        dispatch(postTransactions({
+            ownerId: userId,
+            name,
+            categoryId: selectedCategory.id,
+            count: Number(count)
+        })).then(() => {
+            dispatch(fetchTransactions(userId));
+        });
+
+        dispatch(toggleAddTransaction());
+
+        setName("");
+        setCount("");
+    };
+
+
+    return <form ref={transactionFormRef} onSubmit={handleSubmit} className="newTransactionForm flex-column g8">
         <div className="formHeader flex-between">   
                 <span className="titleText rem1">Новая транзакция</span>
                 <button className="closeButton" type="button" onClick={() => dispatch(toggleAddTransaction())}><CrossIcon/></button>
@@ -52,7 +89,13 @@ export const NewTransactionForm = () => {
                 <button type="button" className="setCategoryButton" onClick={() => dispatch(openCategoryMenu())}><AddIcon2 /></button>
             </div>
             <div className="chooseCategory">
-
+                {selectedCategory ? (
+                    <CategoryComponent category={selectedCategory} />
+                ) : (
+                    <span className="placeholder rem1 opacity05">
+                        Категория не выбрана
+                    </span>
+                )}
             </div>
         </div>
         <div className="countBox flex-column g4">

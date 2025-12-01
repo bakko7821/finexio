@@ -1,5 +1,4 @@
-import { useAppDispatch } from "../../../store/hooks"; 
-
+import { useAppDispatch, useAppSelector } from "../../../store/hooks"; 
 import type { Category } from "../../../pages/TransactionPage";
 import { selectCategory } from "../../../store/slices/categoriesSlice";
 import { closeCategoryMenu } from "../../../store/slices/uiSlice";
@@ -10,14 +9,15 @@ interface CategoryComponentProps {
 
 export const CategoryComponent = ({ category }: CategoryComponentProps) => {
     const dispatch = useAppDispatch();
+    const selectedCategory = useAppSelector(s => s.categories.selectedCategory);
+
+    const isActive = selectedCategory?.id === category.id;
 
     return (
         <div
-            className="category flex g4"
-            key={category.id}
+            className={`category flex-center g4 ${isActive ? "active" : ""}`}
             onClick={() => {
                 dispatch(selectCategory(category));
-                dispatch(closeCategoryMenu());
             }}
         >
             <span className="categoryIcon rem1_5">{category.icon}</span>
@@ -25,3 +25,4 @@ export const CategoryComponent = ({ category }: CategoryComponentProps) => {
         </div>
     );
 };
+

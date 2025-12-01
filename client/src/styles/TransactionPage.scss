@@ -115,12 +115,41 @@
         }
     }
 
+    .categoryList {
+        align-items: start;
+        justify-content: start;
+        display: flex;
+        flex-wrap: wrap;
+    }
+
     .category {
         background-color: $background-color;
-        padding: 8px 6px;
+        padding: 4px 12px;
         border-radius: 12px;
         width: fit-content;
+        cursor: pointer;
+        transition: all 0.5s;
+
+        span {
+            transition: all 0.5s;
+            color: $second-text-color;
+        }
+
+        &:hover {
+            background-color: rgba($color: $main-color, $alpha: 0.5);
+            
+            span {
+                color: $background-card-color;
+            }
+        }
+    }
+
+    .category.active {
+        background-color: $main-color;
         
+        span {
+            color: $background-card-color;
+        }
     }
 
     .addTransactionMenu {

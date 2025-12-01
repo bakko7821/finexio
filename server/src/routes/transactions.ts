@@ -9,7 +9,7 @@ sequelize.addModels([Transaction]);
 
 router.post("/add", async(req, res) => {
     try {
-        const {ownerId, icon, name, categoryId, count} = req.body;
+        const {ownerId, name, categoryId, count} = req.body;
 
         if (!ownerId || !categoryId) 
             return res.status(400).json({ message: "Не верно выбрана категория или пользователь не авторизован" });
@@ -17,7 +17,7 @@ router.post("/add", async(req, res) => {
         if (!name || !count)
             return res.status(400).json({ message: "Введите название и укажите сумму"})
 
-        const transaction = Transaction.create({ownerId, icon, name, categoryId, count})
+        const transaction = Transaction.create({ownerId, name, categoryId, count})
 
         return res.json({ message: "Транзакция добавлена", transaction });
     } catch (error: unknown) {

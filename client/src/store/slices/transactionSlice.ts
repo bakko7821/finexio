@@ -18,6 +18,26 @@ export const fetchTransactions = createAsyncThunk(
     }
 );
 
+export const postTransactions = createAsyncThunk(
+    "transactions/post",
+    async (
+        { ownerId, name, categoryId, count }: {
+            ownerId: number;
+            name: string;
+            categoryId: number;
+            count: number;
+        }
+    ) => {
+        const response = await axios.post(`http://localhost:5000/api/transactions/add`, {
+            ownerId,
+            name,
+            categoryId,
+            count
+        });
+        return response.data;
+    }
+);
+
 const transactionsSlice = createSlice({
     name: "transactions",
     initialState,

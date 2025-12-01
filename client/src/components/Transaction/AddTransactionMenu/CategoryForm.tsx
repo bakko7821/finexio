@@ -80,7 +80,7 @@ export const CategoryForm = () => {
             <button className="closeButton" type="button" onClick={() => dispatch(toggleAddTransaction())}><CrossIcon/></button>
         </div>
         <label htmlFor="" className="myCategoriesText rem1">Мои категории</label>
-        <div className="categoryList">
+        <div className="categoryList flex g8">
             {categoriesList.map((category) => (
                 <CategoryComponent category={category} />
             ))}
