@@ -3,7 +3,7 @@ import { AddIcon2, CrossIcon } from "../../../assets/icons"
 import { useAppDispatch, useAppSelector } from "../../../store/hooks"
 import { openCategoryMenu, toggleAddTransaction } from "../../../store/slices/uiSlice"
 import { CategoryComponent } from "../Category/CategoryComponent"
-import { fetchTransactions, postTransactions } from "../../../store/slices/transactionSlice"
+import { fetchTransactions, postTransaction } from "../../../store/slices/transactionSlice"
 
 export const NewTransactionForm = () => {
     const userId = Number(localStorage.getItem("userId"))
@@ -51,7 +51,7 @@ export const NewTransactionForm = () => {
             return;
         }
 
-        dispatch(postTransactions({
+        dispatch(postTransaction({
             ownerId: userId,
             name,
             categoryId: selectedCategory.id,

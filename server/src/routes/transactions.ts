@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Transaction } from "../models/Transaction";
 import { sequelize } from "../config/db";
 import { Category } from "../models/Category";
+import authMiddleware from "../middleware/authMiddleware";
 
 const router = Router();
 
@@ -83,6 +84,32 @@ router.get("/all/:ownerId", async (req, res) => {
     } catch (error: unknown) {
         console.error(error);
         res.status(500).json({ error });
+    }
+});
+
+router.delete("/delete/:id", authMiddleware, async (req, res) => {
+    try {
+        const userId = (req as any).user.id;       // id из токена
+        const transactionId = Number(req.params.id);
+
+        const transaction = await Transaction.findOne({
+            where: { id: transactionId }
+        });
+
+        if (!transaction) {
+            return res.status(404).json({ message: "Транзакция не найдена" });
+        }
+
+        if (transaction.ownerId !== userId) {
+            return res.status(403).json({ message: "Нет прав на удаление этой транзакции" });
+        }
+
+        await transaction.destroy();
+
+        return res.json({ message: "Транзакция успешно удалена" });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: "Ошибка сервера" });
     }
 });
 

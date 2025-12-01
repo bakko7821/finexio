@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Transaction } from "../../pages/TransactionPage"
+import { deleteTransaction, fetchTransactions } from "../../store/slices/transactionSlice";
+import { useAppDispatch } from "../../store/hooks";
 
 export interface TransactionProps {
     transaction: Transaction
@@ -7,6 +9,7 @@ export interface TransactionProps {
 
 export const TransactionComponent = ({transaction}: TransactionProps) => {
     const [isOpen, setIsOpen] = useState(false)
+    const dispatch = useAppDispatch();
 
     const countClass = transaction.count > 0 ? "positive"
     : transaction.count < 0 ? "negative"
@@ -36,6 +39,16 @@ export const TransactionComponent = ({transaction}: TransactionProps) => {
         };
     }, [onClose]);
 
+    const handleDelete = async () => {
+        const ownerId = Number(localStorage.getItem("userId"));
+
+        await dispatch(deleteTransaction({ id: transaction.id, ownerId }))
+            .then(() => {
+                dispatch(fetchTransactions(ownerId));
+            });
+
+    };
+
     return (
         <div ref={transactionRef} className="transaction flex-column g4" key={transaction.id} onClick={() => handleHideMenu()}>
             <div className="transactionContent flex-between">
@@ -52,7 +65,15 @@ export const TransactionComponent = ({transaction}: TransactionProps) => {
                 <div className="editTransactionBox flex g8">
                     <button className="editTransactionButton flex-center rem0_875">Изменить</button>
                     <span className="circle"></span>
-                    <button className="deleteTransactionButton flex-center rem0_875">Удалить</button>
+                    <button
+                        className="deleteTransactionButton flex-center rem0_875"
+                        onClick={(e) => {
+                            e.stopPropagation(); // чтобы не закрывало меню
+                            handleDelete();
+                        }}
+                    >
+                        Удалить
+                    </button>
                 </div>
             ) : null}
         </div>
