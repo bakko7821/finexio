@@ -4,14 +4,16 @@ $rem1: clamp(0.875rem, 2vw, 1rem);
 $rem1_5: clamp(1rem, 2vw, 1.5rem);
 $rem2: clamp(1.8rem, 2vw, 2rem);
 
-$background-color: #00011e;
-$background-card-color: #00012d;
-$background-card-hover-color: #00023c;
-$main-color: #6aa8f9;
-$red: #870000;
-$main-text-color: #ffffff;
+$background-color: #0F0F10;
+$background-card-color: #1A1B1E;
+$background-card-hover-color: #232528;
+$main-color: #6AA8F9;
+$main-color-hover: #5B94E0;
+$red: #780000;
+$red-hover: #B56161;
+$main-text-color: #FFFFFF;
 $second-text-color: #818181;
-$third-text-color: #adadad;
+$second-text-color-hover: #6A6A6A;
 
 .flex {
     display: flex;

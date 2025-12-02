@@ -13,7 +13,7 @@ nav {
         display: flex;
         align-items: center;
         gap: 8px;
-        color: $third-text-color;
+        color: $second-text-color;
         align-items: center;
         width: 100%;
         font-weight: 600;
@@ -23,7 +23,9 @@ nav {
         border-radius: 12px;
 
         &:hover {
-             background-color: rgba($color: $main-color, $alpha: 0.3);
+            background-color: $main-color-hover;
+            color: $background-card-color;
+           
             svg {
                 transform: rotate(-30deg);
             }
@@ -39,7 +41,8 @@ nav {
         color: $red;
 
         &:hover {
-            background-color: rgba($color: $red, $alpha: 0.3);
+            color: $red;
+            background-color: $red-hover;
         }
     }
 
@@ -48,7 +51,8 @@ nav {
             color: $second-text-color;
 
             &:hover {
-                background-color: rgba($color: $second-text-color, $alpha: 0.3);
+                color: $background-card-color;
+                background-color: $second-text-color-hover;
             }
         }
     }

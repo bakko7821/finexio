@@ -18,7 +18,7 @@ form {
             transition: color 0.5s;
 
             &:hover {
-                color: rgba($color: $main-color, $alpha: 0.5);
+                color: $main-color-hover;
             }
         }
     }
@@ -32,6 +32,6 @@ form {
     border-radius: 12px;
 
     &:hover {
-        background-color: rgba($color: $main-color, $alpha: 0.5);
+        background-color: $main-color-hover;
     }
 }

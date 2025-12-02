@@ -86,7 +86,7 @@ export const CategoryForm = () => {
             ))}
             {isCreating ? (
                 <>
-                <div className="createNewCategoryInput">
+                <div className="createNewCategoryInput flex-center g4">
                     <input 
                         className="newCategoryInput" 
                         value={newCategoryValue}

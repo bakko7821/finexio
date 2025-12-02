@@ -18,10 +18,11 @@
         transition: all 0.5s;
 
         &:hover {
+            background-color: $main-color-hover;
+
             svg {
                 transform: scale(1.1);
             }
-            background-color: rgba($color: $main-color, $alpha: 0.5);
         }
     }
 
@@ -53,6 +54,11 @@
             background-color: $background-card-color;
             padding: 8px;
             border-radius: 16px;
+            transition: all 0.5s;
+
+            &:hover {
+                background-color: $background-card-hover-color;
+            }
 
             .transactionInfo {
                 align-items: center;
@@ -96,12 +102,13 @@
             }
 
             button {
+                padding: 2px;
                 font-weight: 500;
                 color: $second-text-color;
                 transition: all 0.5s;
 
                 &:hover {
-                    color: rgba($color: $second-text-color, $alpha: 0.7);
+                    color: $second-text-color-hover;
                 }
             }
 
@@ -109,16 +116,16 @@
                 color: $red;
 
                 &:hover {
-                    color: rgba($color: $red, $alpha: 0.7);
+                    color: $red-hover;
                 }
             }
         }
     }
 
     .categoryList {
+        max-width: 100%;
         align-items: start;
         justify-content: start;
-        display: flex;
         flex-wrap: wrap;
     }
 
@@ -136,7 +143,7 @@
         }
 
         &:hover {
-            background-color: rgba($color: $main-color, $alpha: 0.5);
+            background-color: $main-color-hover;
             
             span {
                 color: $background-card-color;
@@ -149,6 +156,31 @@
         
         span {
             color: $background-card-color;
+        }
+    }
+
+    .createNewCategoryInput {
+        align-items: center;
+        border-radius: 12px;
+        background-color: $background-color;
+        padding: 4px 4px 4px 12px;
+
+        input {
+            color: $main-text-color;
+        }
+
+        button {
+            padding: 4px;
+            &:hover {
+                svg {
+                    transform: rotate(30deg);
+                    color: $main-color-hover;
+                }
+            }
+
+            svg {
+                color: $main-color;
+            }
         }
     }
 
@@ -184,7 +216,7 @@
                     transform: scale(1.2);
                     
                     svg {
-                        color: rgba($color: $second-text-color, $alpha: 0.7);
+                        color: $second-text-color-hover;
                     }
                 }
             }
@@ -192,11 +224,16 @@
 
         .newTransactionForm, .categoryForm {
             min-height: 310px;
+            max-width: 370px;
             min-width: 370px;
             padding: 16px;
 
             .nameBox, .countBox {
                 padding: 0;
+
+                .descrptionLabel {
+                    color: $second-text-color;
+                }
 
                 label {
                     padding: 0px 8px;
@@ -231,9 +268,19 @@
                         transform: scale(1.2);
                         
                         svg {
-                            color: rgba($color: $main-text-color, $alpha: 0.5);
+                            color: $main-color-hover;
                         }
                     }
+                }
+            }
+
+            .chooseCategory {
+                // padding: 8px;
+                
+                .placeholder {
+                    border-radius: 12px;
+                    padding: 8px;
+                    background-color: $background-color;
                 }
             }
 
@@ -252,7 +299,7 @@
                     background-color: $main-color;
 
                     &:hover {
-                        background-color: rgba($color: $main-color, $alpha: 0.5);
+                        background-color: $main-color-hover;
                     }
                 }
 
@@ -260,19 +307,13 @@
                     color: $red;
                     
                     &:hover {
-                        background-color: rgba($color: $red, $alpha: 0.5);
+                        background-color: $red-hover;
                     }
                 }
             }
 
             .myCategoriesText {
                 padding: 0px 8px;
-            }
-
-            .categoryList {
-                width: 100%;
-                height: 100%;
-                flex: 1;
             }
 
             .createCategoryButton {
@@ -283,7 +324,7 @@
                 transition: all 0.5s;
 
                 &:hover {
-                    background-color: rgba($color: $main-color, $alpha: 0.5);
+                    background-color: $main-color-hover;
                 }
             }
         }

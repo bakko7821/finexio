@@ -88,11 +88,11 @@ export const NewTransactionForm = () => {
                 <label htmlFor="category" className="rem1">Название предприятия</label>
                 <button type="button" className="setCategoryButton" onClick={() => dispatch(openCategoryMenu())}><AddIcon2 /></button>
             </div>
-            <div className="chooseCategory">
+            <div className="chooseCategory flex">
                 {selectedCategory ? (
                     <CategoryComponent category={selectedCategory} />
                 ) : (
-                    <span className="placeholder rem1 opacity05">
+                    <span className="placeholder rem1">
                         Категория не выбрана
                     </span>
                 )}
@@ -101,13 +101,14 @@ export const NewTransactionForm = () => {
         <div className="countBox flex-column g4">
             <label htmlFor="count" className="rem1">Сумма</label>
             <input 
-                type="number"
+                type="text"
                 placeholder="100 ₽"
                 className="countInput rem1"
                 name="count"
                 id="count"
                 value={count}
                 onChange={(e) => setCount(e.target.value)} />
+            <label htmlFor="count" className="descrptionLabel rem0_875">Используйте "-" в начале если хотите добавить расходы.</label>
         </div>
         <div className="buttonsBox flex g8">
             <button type="submit" className="addNewTransactionButton rem1">Добавить</button>
