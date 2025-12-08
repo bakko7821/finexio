@@ -1,10 +1,8 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "../styles/TransactionPage.scss"
 import { AddIcon } from "../assets/icons";
 import { TransactionComponent } from "../components/Transaction/TransactionComponent";
 import { AddTransactionDropDownMenu } from "../components/Transaction/AddTransactionMenu/AddTransactionDropDownMenu";
-import { useDispatch, useSelector } from "react-redux";
 import { fetchTransactions } from "../store/slices/transactionSlice";
 import { toggleAddTransaction } from "../store/slices/uiSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
@@ -28,7 +26,6 @@ export interface Category {
 export const TransactionPage = () => {
     const userId = Number(localStorage.getItem('userId'))
     const dispatch = useAppDispatch();
-    const transactions = useAppSelector((s) => s.transactions.byMonth);
     const isOpenAddMenu = useAppSelector((s) => s.ui.isAddTransactionOpen);
 
     useEffect(() => {

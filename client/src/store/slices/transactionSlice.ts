@@ -60,7 +60,6 @@ export const deleteTransaction = createAsyncThunk(
     async ({ id }: { id: number }, { rejectWithValue }) => {
         try {
             const token = localStorage.getItem("token");
-            console.log(token)
             await axios({
                 method: "delete",
                 url: `http://localhost:5000/api/transactions/delete/${id}`,

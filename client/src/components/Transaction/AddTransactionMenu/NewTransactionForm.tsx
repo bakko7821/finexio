@@ -12,8 +12,6 @@ export const NewTransactionForm = () => {
     const [count, setCount] = useState(temp.count);
 
     const dispatch = useAppDispatch();
-    const transactions = useAppSelector((s) => s.transactions.byMonth);
-    const isOpenAddMenu = useAppSelector((s) => s.ui.isAddTransactionOpen);
     const isOpen = useAppSelector((s) => s.ui.isAddTransactionOpen);
     const selectedCategory = useAppSelector(s => s.categories.selectedCategory);
 
