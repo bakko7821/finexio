@@ -20,7 +20,9 @@ export const CategoryComponent = ({ category }: CategoryComponentProps) => {
                 dispatch(selectCategory(category));
             }}
         >
-            <span className="categoryIcon rem1_5">{category.icon}</span>
+            {category?.icon ? (
+                <span className="categoryIcon rem1_5">{category.icon}</span>
+            ) : null}
             <span className="categoryName rem1">{category.name}</span>
         </div>
     );

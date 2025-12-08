@@ -10,6 +10,7 @@ import { toggleAddTransaction } from "../store/slices/uiSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 
 export interface Transaction {
+    [x: string]: any;
     id: number
     name: string;
     categoryId: number;

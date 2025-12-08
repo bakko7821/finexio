@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from "react"
 import { AddIcon2, CrossIcon } from "../../../assets/icons"
 import { useAppDispatch, useAppSelector } from "../../../store/hooks"
-import { openCategoryMenu, toggleAddTransaction } from "../../../store/slices/uiSlice"
+import { openCategoryMenu, resetTempTransactionForm, setTempTransactionField, toggleAddTransaction } from "../../../store/slices/uiSlice"
 import { CategoryComponent } from "../Category/CategoryComponent"
 import { fetchTransactions, postTransaction } from "../../../store/slices/transactionSlice"
 
 export const NewTransactionForm = () => {
     const userId = Number(localStorage.getItem("userId"))
-    const [name, setName] = useState("")
-    const [count, setCount] = useState("")
+    const temp = useAppSelector(s => s.ui.tempTransactionForm);
+    const [name, setName] = useState(temp.name);
+    const [count, setCount] = useState(temp.count);
 
     const dispatch = useAppDispatch();
     const transactions = useAppSelector((s) => s.transactions.byMonth);
@@ -35,6 +36,7 @@ export const NewTransactionForm = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        dispatch(resetTempTransactionForm());
 
         if (!name.trim()) {
             console.log("Название не указано");
@@ -81,7 +83,10 @@ export const NewTransactionForm = () => {
                 name="name"
                 id="name"
                 value={name}
-                onChange={(e) => setName(e.target.value)} />
+                onChange={(e) => {
+                    setName(e.target.value);
+                    dispatch(setTempTransactionField({ field: "name", value: e.target.value }));
+                }} />
         </div>
         <div className="categoryBox flex-column g4">
             <div className="categoryHeader flex-between">
@@ -107,7 +112,10 @@ export const NewTransactionForm = () => {
                 name="count"
                 id="count"
                 value={count}
-                onChange={(e) => setCount(e.target.value)} />
+                onChange={(e) => {
+                    setCount(e.target.value);
+                    dispatch(setTempTransactionField({ field: "count", value: e.target.value }));
+                }}/>
             <label htmlFor="count" className="descrptionLabel rem0_875">Используйте "-" в начале если хотите добавить расходы.</label>
         </div>
         <div className="buttonsBox flex g8">

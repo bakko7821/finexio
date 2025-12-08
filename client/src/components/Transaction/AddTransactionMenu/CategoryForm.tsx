@@ -82,7 +82,7 @@ export const CategoryForm = () => {
         <label htmlFor="" className="myCategoriesText rem1">Мои категории</label>
         <div className="categoryList flex g8">
             {categoriesList.map((category) => (
-                <CategoryComponent category={category} />
+                <CategoryComponent category={category} key={category.id}/>
             ))}
             {isCreating ? (
                 <>

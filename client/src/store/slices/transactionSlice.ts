@@ -38,40 +38,44 @@ export const postTransaction = createAsyncThunk(
         { ownerId, name, categoryId, count }: { ownerId: number; name: string; categoryId: number; count: number },
         { rejectWithValue }
     ) => {
-        if (!name || !categoryId || !count) {
-            console.log("Все поля должны быть заполнены");
-            return rejectWithValue("Неверные данные");
-        }
-
         try {
             const token = localStorage.getItem("token");
             const response = await axios.post(
-                `http://localhost:5000/api/transactions/add`,
+                "http://localhost:5000/api/transactions/add",
                 { ownerId, name, categoryId, count },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            return response.data;
+
+            return response.data; // 🌟 возвращаем Transaction
         } catch (err: any) {
             return rejectWithValue(err.response?.data?.message || "Ошибка сервера");
         }
     }
 );
+
 
 // Удаление транзакции
 export const deleteTransaction = createAsyncThunk(
     "transactions/delete",
-    async ({ id, ownerId }: { id: number; ownerId: number }, { rejectWithValue }) => {
+    async ({ id }: { id: number }, { rejectWithValue }) => {
         try {
             const token = localStorage.getItem("token");
-            await axios.delete(`http://localhost:5000/api/transactions/delete/${id}`, {
-                headers: { Authorization: `Bearer ${token}` },
+            console.log(token)
+            await axios({
+                method: "delete",
+                url: `http://localhost:5000/api/transactions/delete/${id}`,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                }
             });
-            return ownerId; // чтобы после удаления заново подгрузить транзакции
+
+            return id;
         } catch (err: any) {
             return rejectWithValue(err.response?.data?.message || "Ошибка сервера");
         }
     }
 );
+
 
 const transactionsSlice = createSlice({
     name: "transactions",
@@ -79,6 +83,7 @@ const transactionsSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
+            // FETCH
             .addCase(fetchTransactions.pending, (state) => {
                 state.loading = true;
                 state.error = null;
@@ -91,13 +96,36 @@ const transactionsSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload as string;
             })
+
+            // POST
             .addCase(postTransaction.fulfilled, (state, action) => {
-                // ничего не делаем, список будет обновлен через fetch
+                const tx = action.payload as Transaction;
+
+                // если нет даты — ставим текущую
+                const date = tx.date ?? tx.createdAt ?? new Date().toISOString();
+                const monthKey = date.slice(0, 7);
+
+                if (!state.byMonth[monthKey]) {
+                    state.byMonth[monthKey] = [];
+                }
+
+               state.byMonth[monthKey].push({
+                    ...tx,
+                    createdAt: date,
+                    category: tx.category ?? { id: tx.categoryId, name: "Неизвестно", icon: "" } // заглушка
+                });
             })
+
+            // DELETE
             .addCase(deleteTransaction.fulfilled, (state, action) => {
-                // ничего не делаем, список будет обновлен через fetch
+                const id = action.payload as number;
+
+                for (const month in state.byMonth) {
+                    state.byMonth[month] = state.byMonth[month].filter(tx => tx.id !== id);
+                }
             });
     },
 });
+
 
 export default transactionsSlice.reducer;

@@ -42,7 +42,7 @@ export const TransactionComponent = ({transaction}: TransactionProps) => {
     const handleDelete = async () => {
         const ownerId = Number(localStorage.getItem("userId"));
 
-        await dispatch(deleteTransaction({ id: transaction.id, ownerId }))
+        await dispatch(deleteTransaction({ id: transaction.id}))
             .then(() => {
                 dispatch(fetchTransactions(ownerId));
             });
