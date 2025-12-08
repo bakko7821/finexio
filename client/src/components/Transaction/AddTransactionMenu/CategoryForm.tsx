@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { closeCategoryMenu, toggleAddTransaction } from "../../../store/slices/uiSlice";
 import { CategoryComponent } from "../Category/CategoryComponent";
 import { AddIcon, BackIcon, CrossIcon, DoneIcon } from "../../../assets/icons";
 import { createCategory, fetchCategories } from "../../../store/slices/categoriesSlice";
+import axios from "axios";
 
 export const CategoryForm = () => {
     const dispatch = useAppDispatch();
@@ -20,16 +21,19 @@ export const CategoryForm = () => {
         dispatch(fetchCategories(userId));
     }, [userId]);
 
-    const handleSubmit = () => {
-        const chars = Array.from(newCategoryValue.trim());
-        const categoryIcon = chars[0];
-        const categoryName = chars.slice(1).join("").trim();
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+
+        const categoryIcon = await axios.post("http://localhost:5000/api/ai/emoji", { name: newCategoryValue });
+        const finalIcon = categoryIcon.data.emoji;
+
+        console.log(finalIcon, categoryIcon, newCategoryValue)
 
         dispatch(
             createCategory({
                 ownerId: userId,
-                icon: categoryIcon,
-                name: categoryName
+                icon: finalIcon,
+                name: newCategoryValue
             })
         );
 
