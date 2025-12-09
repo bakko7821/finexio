@@ -16,9 +16,12 @@ router.post("/add",  async(req, res) => {
         if (!icon || !name)
             return res.status(400).json({ message: "Введите название и иконку"})
 
-        const category = Category.create({ownerId, icon, name})
+        const category = await Category.create({ownerId, icon, name})
 
-        return res.json({ message: "Категория создана", category });
+        return res.json({ 
+            message: 'Категория создана',
+            category: category
+        });
     } catch (error: unknown) {
         console.error(error)
         res.status(500).json({ error })

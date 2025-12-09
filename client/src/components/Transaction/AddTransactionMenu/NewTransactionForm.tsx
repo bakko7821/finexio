@@ -51,6 +51,8 @@ export const NewTransactionForm = () => {
             return;
         }
 
+        console.log(selectedCategory)
+
         dispatch(postTransaction({
             ownerId: userId,
             name,
