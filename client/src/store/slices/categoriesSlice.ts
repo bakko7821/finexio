@@ -28,7 +28,6 @@ export const createCategory = createAsyncThunk<
     async ({ ownerId, icon, name }) => {
         const response = await axios.post("http://localhost:5000/api/categories/add", {
             ownerId,
-            icon,
             name
         });
 

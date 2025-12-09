@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { closeCategoryMenu, toggleAddTransaction } from "../../../store/slices/uiSlice";
 import { CategoryComponent } from "../Category/CategoryComponent";
@@ -20,16 +20,13 @@ export const CategoryForm = () => {
         dispatch(fetchCategories(userId));
     }, [userId]);
 
-    const handleSubmit = () => {
-        const chars = Array.from(newCategoryValue.trim());
-        const categoryIcon = chars[0];
-        const categoryName = chars.slice(1).join("").trim();
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
 
         dispatch(
             createCategory({
                 ownerId: userId,
-                icon: categoryIcon,
-                name: categoryName
+                name: newCategoryValue,
             })
         );
 

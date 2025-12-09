@@ -20,7 +20,6 @@ export interface Transaction {
 export interface Category {
     id: number;
     name: string;
-    icon: string;
 }
 
 export const TransactionPage = () => {
