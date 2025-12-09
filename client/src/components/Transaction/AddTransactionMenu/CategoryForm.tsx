@@ -4,7 +4,6 @@ import { closeCategoryMenu, toggleAddTransaction } from "../../../store/slices/u
 import { CategoryComponent } from "../Category/CategoryComponent";
 import { AddIcon, BackIcon, CrossIcon, DoneIcon } from "../../../assets/icons";
 import { createCategory, fetchCategories } from "../../../store/slices/categoriesSlice";
-import axios from "axios";
 
 export const CategoryForm = () => {
     const dispatch = useAppDispatch();
@@ -24,16 +23,10 @@ export const CategoryForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
-        const categoryIcon = await axios.post("http://localhost:5000/api/ai/emoji", { name: newCategoryValue });
-        const finalIcon = categoryIcon.data.emoji;
-
-        console.log(finalIcon, categoryIcon, newCategoryValue)
-
         dispatch(
             createCategory({
                 ownerId: userId,
-                icon: finalIcon,
-                name: newCategoryValue
+                name: newCategoryValue,
             })
         );
 

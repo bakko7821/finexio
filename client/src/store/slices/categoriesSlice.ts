@@ -22,21 +22,18 @@ export const fetchCategories = createAsyncThunk(
 
 export const createCategory = createAsyncThunk<
     Category,                                                    // то, что thunk возвращает
-    { ownerId: number; icon: string; name: string }             // то, что thunk принимает
+    { ownerId: number; name: string }             // то, что thunk принимает
 >(
     "categories/create",
-    async ({ ownerId, icon, name }) => {
+    async ({ ownerId, name }) => {
         await axios.post("http://localhost:5000/api/categories/add", {
             ownerId,
-            icon,
             name
         });
 
-        // Возвращаем локальный объект категории
         return {
-            id: Date.now(),   // временный ID
+            id: Date.now(),
             ownerId,
-            icon,
             name
         };
     }
