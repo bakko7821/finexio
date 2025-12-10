@@ -7,6 +7,7 @@ import { sequelize } from "./config/db";
 import authRouters from "./routes/auth";
 import transactionsRoutes from "./routes/transactions";
 import categoriesRoutes from "./routes/categories";
+import usersRoutes from "./routes/users";
 // import boardsRoutes from "./routes/boards";
 // import columnsRoutes from "./routes/columns";
 // import tasksRoutes from "./routes/tasks";
@@ -23,7 +24,7 @@ app.use(express.json());
 
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 app.use("/api/auth", authRouters);
-// app.use("/api/users", usersRoutes);
+app.use("/api/users", usersRoutes);
 app.use("/api/transactions", transactionsRoutes);
 app.use("/api/categories", categoriesRoutes);
 // app.use("/api/tasks", tasksRoutes);

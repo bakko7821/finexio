@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../styles/TransactionPage.scss"
 import { AddIcon } from "../assets/icons";
 import { TransactionComponent } from "../components/Transaction/TransactionComponent";
@@ -6,6 +6,7 @@ import { AddTransactionDropDownMenu } from "../components/Transaction/AddTransac
 import { fetchTransactions } from "../store/slices/transactionSlice";
 import { toggleAddTransaction } from "../store/slices/uiSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
+import axios from "axios";
 
 export interface Transaction {
     [x: string]: any;
@@ -23,14 +24,32 @@ export interface Category {
     icon: string;
 }
 
+export interface User {
+    id: number;
+    username: string;
+    email: string;
+    balance: number;
+}
+
 export const TransactionPage = () => {
     const userId = Number(localStorage.getItem('userId'))
+    const [user, setUser] = useState<User | null>(null)
     const dispatch = useAppDispatch();
     const isOpenAddMenu = useAppSelector((s) => s.ui.isAddTransactionOpen);
 
     useEffect(() => {
         dispatch(fetchTransactions(userId));
     }, []);
+
+    useEffect(() => {
+        fetchUser(userId)
+    }, [])
+
+    const fetchUser = async(id: number) => {
+        const response = await axios.get(`http://localhost:5000/api/users/${id}`);
+
+        setUser(response.data)
+    }
 
     const transactionsByMonth = useAppSelector((s) => s.transactions.byMonth);
     const months = Object.keys(transactionsByMonth).sort((a, b) => b.localeCompare(a));
@@ -47,7 +66,10 @@ export const TransactionPage = () => {
     return (
         <div className="main_content transactions flex-column g16">
             <button className="addTransactionButton flex-center" onClick={() => dispatch(toggleAddTransaction())}><AddIcon/></button>
-            <span className="titleText rem1_5">История прошлых транзакций</span>
+            <div className="titleTextBox flex-between">
+                <span className="titleText rem1_5">История прошлых транзакций</span>
+                <span className="balance rem1_5">Баланс: <span className="value rem1_5">{user?.balance} ₽</span></span>
+            </div>
             {months.length > 0 ? (
                 <div className="allTransactionsList flex-column g12">
                     {months.map((month) => (

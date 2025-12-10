@@ -30,6 +30,15 @@
         font-weight: 500;
     }
 
+    .balance {
+        font-weight: 400;
+
+        .value {
+            color: $main-color;
+            font-weight: 600;
+        }
+    }
+
     .mounthNameBox {
         width: 100%;
         

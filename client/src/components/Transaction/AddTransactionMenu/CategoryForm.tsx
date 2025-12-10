@@ -15,7 +15,7 @@ export const CategoryForm = () => {
 
     const isOpen = useAppSelector((s) => s.ui.isAddTransactionOpen);
     const transactionFormRef = useRef<HTMLFormElement | null>(null);
-
+ 
     useEffect(() => {
         dispatch(fetchCategories(userId));
     }, [userId]);
