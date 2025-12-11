@@ -1,6 +1,9 @@
 @use './variables' as *;
 
 .radarChart {
-    max-width: 400px;
-    max-height: 400px;
+    background-color: $background-card-color;
+    padding: 8px;
+    border-radius: 32px;
+    max-width: 500px;
+    max-height: 500px;
 }

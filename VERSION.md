@@ -191,3 +191,7 @@ npm install sequelize-typescript
 - Установленна библиотека Charts.js
 - Создан компонент **/components/Charts/RadarChart.js**
 - Добавленны базовые стили
+
+### commit 12.16.1
+
+- Небольшое добавление стилей
