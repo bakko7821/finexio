@@ -338,4 +338,22 @@
             }
         }
     }
+
+    .allTransactionsList {
+        padding-right: 8px;
+        overflow-y: scroll;
+    }
+
+    .allTransactionsList::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .allTransactionsList::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .allTransactionsList::-webkit-scrollbar-thumb {
+        background-color: $main-color;
+        border-radius: 20px;
+        border: none;
+    }
 }

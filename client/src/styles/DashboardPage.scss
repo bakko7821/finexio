@@ -1,1 +1,6 @@
 @use './variables' as *;
+
+.radarChart {
+    max-width: 400px;
+    max-height: 400px;
+}

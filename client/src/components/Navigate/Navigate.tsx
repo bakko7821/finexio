@@ -13,7 +13,7 @@ export const Navigate = () => {
         <nav className="flex-column flex-between">
             <div className="headLinksBox flex-column g8">
                 <NavLink to={'/dashboard'}><GraphIcon/> Панель</NavLink>
-                <NavLink to={'/account'} className={'flex-between'}></NavLink>
+                <NavLink to={'/account'}><UserIcon/> Аккаунт</NavLink>
                 <NavLink to={'/fincance'}><MoneyBagIcon/> Финансы</NavLink>
                 <NavLink to={'/transactions'}><TransactionIcon/> Транзакции</NavLink>
                 <button className="logOutButton" onClick={() => handleLogOut()}><LogOutIcon/> Выйти</button>

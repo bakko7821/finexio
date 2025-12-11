@@ -3,6 +3,7 @@ import { Transaction } from "../models/Transaction";
 import { sequelize } from "../config/db";
 import { Category } from "../models/Category";
 import authMiddleware from "../middleware/authMiddleware";
+import { Op } from "sequelize";
 
 const router = Router();
 
@@ -88,8 +89,9 @@ router.get("/all/:ownerId", async (req, res) => {
 });
 
 router.delete("/delete/:id", authMiddleware, async (req, res) => {
+    const userId = (req as any).user.id;
+
     try {
-        const userId = (req as any).user.id;       // id из токена
         const transactionId = Number(req.params.id);
 
         const transaction = await Transaction.findOne({
@@ -109,6 +111,160 @@ router.delete("/delete/:id", authMiddleware, async (req, res) => {
         return res.json({ message: "Транзакция успешно удалена" });
     } catch (err) {
         console.log(err);
+        return res.status(500).json({ message: "Ошибка сервера" });
+    }
+});
+
+router.get("/now-month/:ownerId", authMiddleware, async (req, res) => {
+    try {
+        const ownerId = Number(req.params.ownerId);
+        if (!ownerId) {
+            return res.status(400).json({ message: "Не верно передан параметр ownerId" });
+        }
+
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+
+        const endOfMonth = new Date();
+        endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+        endOfMonth.setDate(0);
+        endOfMonth.setHours(23, 59, 59, 999);
+
+        const transactions = await Transaction.findAll({
+            where: {
+                ownerId,
+                createdAt: {
+                    [Op.between]: [startOfMonth, endOfMonth],
+                },
+            },
+            include: [Category], // нужно для name и icon
+        });
+
+        if (!transactions || transactions.length === 0) {
+            return res.status(404).json({ message: "Нет транзакций за этот месяц" });
+        }
+
+        // Агрегация только по расходам (отрицательные числа)
+        const aggregated: { [key: number]: { categoryId: number, name: string, icon: string, value: number } } = {};
+
+        transactions.forEach(t => {
+            if (t.count >= 0) return; // пропускаем доходы
+
+            const cat = t.category;
+            if (!aggregated[cat.id]) {
+                aggregated[cat.id] = { categoryId: cat.id, name: cat.name, icon: cat.icon, value: 0 };
+            }
+            aggregated[cat.id].value += t.count; // здесь value будет отрицательным
+        });
+
+        return res.json(Object.values(aggregated));
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Ошибка сервера" });
+    }
+});
+
+router.get("/last-and-now/:ownerId", authMiddleware, async (req, res) => {
+    try {
+        const ownerId = Number(req.params.ownerId);
+        if (!ownerId) {
+            return res.status(400).json({ message: "Не верно передан параметр ownerId" });
+        }
+
+        const now = new Date();
+
+        // --- Текущий месяц ---
+        const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+        const endOfThisMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+        // --- Прошлый месяц ---
+        const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1, 0, 0, 0, 0);
+        const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+
+        // --- Функция для агрегации расходов ---
+        const aggregateExpenses = async (start: Date, end: Date) => {
+            const transactions = await Transaction.findAll({
+                where: {
+                    ownerId,
+                    createdAt: { [Op.between]: [start, end] }
+                },
+                include: [Category]
+            });
+
+            const aggregated: { [key: number]: { categoryId: number, name: string, icon: string, value: number } } = {};
+            transactions.forEach(t => {
+                if (t.count >= 0) return; // учитываем только расходы
+                const cat = t.category;
+                if (!aggregated[cat.id]) {
+                    aggregated[cat.id] = { categoryId: cat.id, name: cat.name, icon: cat.icon, value: 0 };
+                }
+                aggregated[cat.id].value += t.count;
+            });
+
+            return aggregated;
+        };
+
+        const thisMonth = await aggregateExpenses(startOfThisMonth, endOfThisMonth);
+        const lastMonth = await aggregateExpenses(startOfLastMonth, endOfLastMonth);
+
+        // Возвращаем оба массива
+        return res.json({
+            thisMonth: Object.values(thisMonth),
+            lastMonth: Object.values(lastMonth)
+        });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Ошибка сервера" });
+    }
+});
+
+
+router.get("/:month/:id", authMiddleware, async (req, res) => {
+    try {
+        const ownerId = Number(req.params.id);
+        const month = Number(req.params.month); // 1–12
+
+        if (!ownerId) {
+            return res.status(400).json({
+                message: "Неверно передан параметр id (ownerId)",
+            });
+        }
+
+        if (!month || month < 1 || month > 12) {
+            return res.status(400).json({
+                message: "Параметр month должен быть числом от 1 до 12",
+            });
+        }
+
+        const now = new Date();
+        const year = now.getFullYear(); // Можно потом расширить на выбор года
+
+        const startOfMonth = new Date(year, month - 1, 1, 0, 0, 0, 0);
+        const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
+
+        const transactions = await Transaction.findAll({
+            where: {
+                ownerId,
+                createdAt: {
+                    [Op.between]: [startOfMonth, endOfMonth],
+                },
+            },
+            include: [Category],
+            order: [["createdAt", "DESC"]],
+        });
+
+        if (!transactions || transactions.length === 0) {
+            return res.status(404).json({
+                message: "Транзакции за этот месяц не найдены",
+            });
+        }
+
+        return res.json(transactions);
+    } catch (error) {
+        console.error(error);
         return res.status(500).json({ message: "Ошибка сервера" });
     }
 });
