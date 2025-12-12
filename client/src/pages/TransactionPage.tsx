@@ -22,6 +22,7 @@ export interface Category {
     id: number;
     name: string;
     icon: string;
+    color: string;
 }
 
 export interface User {
@@ -79,7 +80,7 @@ export const TransactionPage = () => {
                                 <span className="monthName">{formatMonth(month)}</span>
                                 <span className="plug"></span>
                             </div>
-                            {transactionsByMonth[month].map((transaction) => (
+                            {transactionsByMonth[month].map((transaction: Transaction) => (
                                 <TransactionComponent key={transaction.id} transaction={transaction} />
                             ))}
                         </div>

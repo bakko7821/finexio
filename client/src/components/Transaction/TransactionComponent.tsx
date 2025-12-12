@@ -49,10 +49,26 @@ export const TransactionComponent = ({transaction}: TransactionProps) => {
 
     };
 
+    function hexToRgb(hex: string) {
+        const stripped = hex.replace("#", "");
+
+        const bigint = parseInt(stripped, 16);
+        const r = (bigint >> 16) & 255;
+        const g = (bigint >> 8) & 255;
+        const b = bigint & 255;
+
+        return `${r}, ${g}, ${b}`;
+    }
+
     return (
         <div ref={transactionRef} className="transaction flex-column g4" key={transaction.id} onClick={() => handleHideMenu()}>
-            <div className="transactionContent flex-between">
-                <div className="transactionInfo flex g8">
+            <div 
+                className="transactionContent flex-between"
+                style={{
+                    boxShadow: `0px 0px 10px 1px rgba(${hexToRgb(transaction.category.color)}, 0.3) inset`,
+                }}>
+                <div 
+                className="transactionInfo flex g8">
                     {transaction.category.icon ? (<span className="transactionIcon rem2">{transaction.category.icon}</span>) : null}
                     <div className="transactionTextInfo flex-column">
                         <span className="nameText rem1">{transaction.name}</span>

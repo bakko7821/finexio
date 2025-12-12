@@ -195,3 +195,14 @@ npm install sequelize-typescript
 ### commit 12.16.1
 
 - Небольшое добавление стилей
+
+### commit 13.17.1
+
+### Серверная часть
+
+- К модели **Category.ts** добавлен параметр color
+- В роутах добавлен вывод color у transaction.category
+
+### Клиентская часть
+
+- Создан DoughnutChart.tsx - график в виде пончика

@@ -146,14 +146,14 @@ router.get("/now-month/:ownerId", authMiddleware, async (req, res) => {
         }
 
         // Агрегация только по расходам (отрицательные числа)
-        const aggregated: { [key: number]: { categoryId: number, name: string, icon: string, value: number } } = {};
+        const aggregated: { [key: number]: { categoryId: number, color: string, name: string, icon: string, value: number } } = {};
 
         transactions.forEach(t => {
             if (t.count >= 0) return; // пропускаем доходы
 
             const cat = t.category;
             if (!aggregated[cat.id]) {
-                aggregated[cat.id] = { categoryId: cat.id, name: cat.name, icon: cat.icon, value: 0 };
+                aggregated[cat.id] = { categoryId: cat.id, color: cat.color, name: cat.name, icon: cat.icon, value: 0 };
             }
             aggregated[cat.id].value += t.count; // здесь value будет отрицательным
         });
