@@ -1,9 +1,35 @@
 @use './variables' as *;
 
-.radarChart {
+.doughnutChart {
     background-color: $background-card-color;
-    padding: 8px;
+    padding: 16px;
     border-radius: 32px;
-    max-width: 500px;
-    max-height: 500px;
+
+    .categoryBox {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        font-size: $rem1;
+
+        .item {
+            padding: 8px;
+            background-color: transparent;
+            transition: background-color 0.5s;
+            border-radius: 8px;
+
+            &:hover {
+                background-color: $background-card-hover-color;
+            }
+        }
+    }
+}
+
+.titleText {
+    color: $main-text-color;
+    font-size: $rem1_5;
+    font-weight: 500;
 }

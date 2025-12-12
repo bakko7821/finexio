@@ -42,20 +42,6 @@ export const DoughnutChart = ({ data }: DoughnutChartProps) => {
             } as any ],
         };
 
-        const centerTextPlugin = {
-            id: "centerTextPlugin",
-            beforeDraw(chart: any) {
-                const { ctx, width, height } = chart;
-                ctx.save();
-                ctx.font = "16px sans-serif";
-                ctx.textAlign = "center";
-                ctx.fillStyle = "#fff";
-
-                const sum = values.reduce((a, b) => a + b, 0);
-                ctx.fillText(`-${sum} ₽`, width / 2, height / 2);
-            }
-        };
-
         if (chartRef.current) chartRef.current.destroy();
 
         chartRef.current = new Chart(canvasRef.current, {
@@ -65,12 +51,17 @@ export const DoughnutChart = ({ data }: DoughnutChartProps) => {
                     responsive: true,
                     maintainAspectRatio: false,
 
-                    cutout: "80%" as any,
+                    cutout: "90%" as any,
 
                     plugins: {
                         legend: {
+                            display: false,
                             labels: {
-                                font: { size: 14 },
+                                font: {
+                                    size: 16,
+                                },
+                                boxWidth: 20,
+                                padding: 8,
                             },
                         },
                         tooltip: {
@@ -80,10 +71,9 @@ export const DoughnutChart = ({ data }: DoughnutChartProps) => {
                                     return `${item.icon} ${item.name}: ${item.value} ₽`;
                                 }
                             }
-                        }
+                        },
                     }
                 } as any,
-                plugins: [centerTextPlugin]
             });
 
 
@@ -92,5 +82,37 @@ export const DoughnutChart = ({ data }: DoughnutChartProps) => {
         };
     }, [data]);
 
-    return <canvas ref={canvasRef} className="doughnutChart" />;
+    return <>
+    <div className="doughnutChart" style={{ position: "relative", width: 400, height: 400 }}>
+        <canvas ref={canvasRef} />
+        
+        <div className="categoryBox">
+            {data.map((item, i) => (
+            <div
+                className="item"
+                key={item.categoryId}
+                style={{ cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "start", margin: "2px 0" }}
+                onClick={() => {
+                    const meta = chartRef.current?.getDatasetMeta(0);
+                    if (!meta) return;
+                    const arc = meta.data[i] as any;
+                    arc.hidden = !arc.hidden;
+                    chartRef.current?.update();
+                }}
+                >
+                <span
+                    style={{
+                    display: "inline-block",
+                    width: 12,
+                    height: 12,
+                    backgroundColor: item.color,
+                    marginRight: 6
+                    }}
+                />
+                <span>{item.icon} {item.name}</span>
+            </div>
+            ))}
+        </div>
+        </div>
+        </>
 };

@@ -26,8 +26,19 @@ export const DashboardPage = () => {
     }, [])
 
     return (
-        <div className="main_content dashboard">
-            <DoughnutChart data={monthData} />
+        <div className="main_content dashboard flex-column g16">
+            <div className="graphicsBox flex g16">
+                <div className="chart flex-column g16">
+                    <span className='titleText'>Траты за Декабрь</span>
+                    <DoughnutChart data={monthData} />
+                </div>
+                <div className="chart flex-column g16">
+                    <span className='titleText'>Траты за прошлые месяцы</span>
+                </div>
+            </div>
+            <div className="lastTransactionsBox">
+                <span className='titleText'>Список прошлых транзакций</span>
+            </div>
         </div>
     )
 }

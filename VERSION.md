@@ -206,3 +206,8 @@ npm install sequelize-typescript
 ### Клиентская часть
 
 - Создан DoughnutChart.tsx - график в виде пончика
+
+# commit 13.18.1
+
+- Чуть переделан пончик
+- Создан макет для страницы Dashboard.tsx
