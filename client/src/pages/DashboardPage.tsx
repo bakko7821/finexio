@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
-import { RadarCharts } from '../components/Charts/RadarChart'
 import '../styles/DashboardPage.scss'
 import axios from 'axios'
 import { DoughnutChart, type CategoryItem } from '../components/Charts/DoughnutChart'
 import { BarCharts } from '../components/Charts/BarChart'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { TransactionComponent } from '../components/Transaction/TransactionComponent'
+import type { Transaction } from './TransactionPage'
+import { fetchTransactions } from '../store/slices/transactionSlice'
 
 export const DashboardPage = () => {
     const token = localStorage.getItem("token")
     const userId = Number(localStorage.getItem("userId"))
+    const dispatch = useAppDispatch();
 
     const [monthData, setMonthData] = useState<CategoryItem[]>([]);
     const [allMonthData, setAllMonthData] = useState([])
@@ -54,6 +58,13 @@ export const DashboardPage = () => {
         })()
     }, [])
 
+    useEffect(() => {
+        dispatch(fetchTransactions(userId));
+    }, []);
+
+    const transactionsByMonth = useAppSelector((s) => s.transactions.byMonth);
+    const months = Object.keys(transactionsByMonth).sort((a, b) => b.localeCompare(a));
+
     return (
         <div className="main_content dashboard flex-column g16">
             <div className="graphicsBox flex g16">
@@ -62,12 +73,24 @@ export const DashboardPage = () => {
                     <DoughnutChart data={monthData} />
                 </div>
                 <div className="chart bar flex-column g16">
-                    <span className='titleText'>Траты за прошлые месяцы</span>
+                    <span className='titleText'>Траты за всё время</span>
                     <BarCharts data={allMonthData} />
                 </div>
             </div>
-            <div className="lastTransactionsBox">
-                <span className='titleText'>Список прошлых транзакций</span>
+            <div className="lastTransactionsBox flex-column g16">
+                <span className='titleText'>Список последних транзакций</span>
+                {months.length > 0 ? (
+                    <div className="allTransactionsList flex-column g12">
+                        {transactionsByMonth[months[0]]
+                            .slice(0, 5) // берем только первые 5 транзакций
+                            .map((transaction: Transaction) => (
+                            <TransactionComponent key={transaction.id} transaction={transaction} />
+                        ))}
+                    </div>
+                ) : (
+                    <span className="nullMessage rem1">У вас отсутствуют транзакций</span>
+                )}
+
             </div>
         </div>
     )

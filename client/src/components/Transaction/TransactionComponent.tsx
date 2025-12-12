@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import '../../styles/TransactionsComponent.scss'
 import type { Transaction } from "../../pages/TransactionPage"
 import { deleteTransaction, fetchTransactions } from "../../store/slices/transactionSlice";
 import { useAppDispatch } from "../../store/hooks";

@@ -223,3 +223,8 @@ npm install sequelize-typescript
 
 - Создан компонент **components/Charts/BarChart.tsx**
 - Стилизован бар график в DashboardPage.scss
+
+# commit 14.20.1
+
+- В **DashBoard.tsx** теперь выводяться последние 5 транзакций
+- Стили для компонента TransactionComponents.tsx, перенесены из TransactionsPage.scss в TransactionComponent.scss
