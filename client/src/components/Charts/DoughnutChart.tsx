@@ -65,13 +65,31 @@ export const DoughnutChart = ({ data }: DoughnutChartProps) => {
                             },
                         },
                         tooltip: {
-                            callbacks: {
-                                label: function (context: any) {
-                                    const item = data[context.dataIndex];
-                                    return `${item.icon} ${item.name}: ${item.value} ₽`;
+                            enabled: false,
+                            external: function(context: any) {
+                                const tooltipEl = document.getElementById("chart-tooltip") || (() => {
+                                    const el = document.createElement("div");
+                                    el.id = "chart-tooltip";
+                                    document.body.appendChild(el);
+                                    return el;
+                                })();
+
+                                const tooltipModel = context.tooltip;
+
+                                if (tooltipModel.opacity === 0) {
+                                    tooltipEl.style.opacity = "0";
+                                    return;
                                 }
+
+                                const item = data[tooltipModel.dataPoints[0].dataIndex];
+                                tooltipEl.innerHTML = `${item.icon} ${item.name}: ${item.value} ₽`;
+
+                                const canvasRect = canvasRef.current!.getBoundingClientRect();
+                                tooltipEl.style.left = canvasRect.left + window.scrollX + tooltipModel.caretX + "px";
+                                tooltipEl.style.top = canvasRect.top + window.scrollY + tooltipModel.caretY + "px";
+                                tooltipEl.style.opacity = "1";
                             }
-                        },
+                        }
                     }
                 } as any,
             });

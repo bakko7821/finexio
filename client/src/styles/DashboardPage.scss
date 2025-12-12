@@ -16,6 +16,7 @@
         font-size: $rem1;
 
         .item {
+            cursor: pointer;
             padding: 8px;
             background-color: transparent;
             transition: background-color 0.5s;
@@ -26,6 +27,19 @@
             }
         }
     }
+}
+
+#chart-tooltip {
+    position: absolute;
+    z-index: 999;
+    pointer-events: none;
+    color: $main-text-color;
+    padding: 8px;
+    border-radius: 8px;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background-color: rgba($color: $background-color, $alpha: 0.5);
+    border: 2px $background-color solid;
 }
 
 .barCharts {

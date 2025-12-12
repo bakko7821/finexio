@@ -8,15 +8,15 @@ sequelize.addModels([Category]);
 
 router.post("/add",  async(req, res) => {
     try {
-        const {ownerId, icon, name} = req.body;
+        const {ownerId, icon, name, color} = req.body;
 
         if (!ownerId) 
             return res.status(400).json({ message: "Пользователь не авторизован" });
 
-        if (!icon || !name)
-            return res.status(400).json({ message: "Введите название и иконку"})
+        if (!icon || !name || !color)
+            return res.status(400).json({ message: "Введите название и иконку, не забудьте выбрать цвет."})
 
-        const category = await Category.create({ownerId, icon, name})
+        const category = await Category.create({ownerId, icon, name, color})
 
         return res.json({ 
             message: 'Категория создана',

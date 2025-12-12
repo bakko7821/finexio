@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { Category } from "../../pages/TransactionPage";
+import { color } from "chart.js/helpers";
 
 interface CategoriesState {
     list: Category[];
@@ -22,14 +23,18 @@ export const fetchCategories = createAsyncThunk(
 
 export const createCategory = createAsyncThunk<
     Category,
-    { ownerId: number; icon: string; name: string }
+    { ownerId: number; 
+        icon: string; 
+        name: string;
+        color: string }
 >(
     "categories/create",
-    async ({ ownerId, icon, name }) => {
+    async ({ ownerId, icon, name, color }) => {
         const response = await axios.post("http://localhost:5000/api/categories/add", {
             ownerId,
             icon,
-            name
+            name,
+            color
         });
 
         return response.data.category

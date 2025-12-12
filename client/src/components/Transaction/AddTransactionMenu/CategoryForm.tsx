@@ -12,6 +12,7 @@ export const CategoryForm = () => {
 
     const [isCreating, setIsCreate] = useState(false);
     const [newCategoryValue, setNewCategoryValue] = useState("");
+    const [color, setColor] = useState("#ffffffff")
 
     const isOpen = useAppSelector((s) => s.ui.isAddTransactionOpen);
     const transactionFormRef = useRef<HTMLFormElement | null>(null);
@@ -29,7 +30,8 @@ export const CategoryForm = () => {
             createCategory({
                 ownerId: userId,
                 icon: categoryIcon,
-                name: categoryName
+                name: categoryName,
+                color
             })
         );
 
@@ -61,6 +63,10 @@ export const CategoryForm = () => {
                             type="text"
                             placeholder="Новая категория"
                         />
+                        <input 
+                            type="color" 
+                            value={color}
+                            onChange={(e) => setColor(e.target.value)}/>
                         <button onClick={handleSubmit}><DoneIcon/></button>
                     </div>
                 )}

@@ -110,14 +110,14 @@ router.get("/now-month/:ownerId", authMiddleware, async (req, res) => {
                     [Op.between]: [startOfMonth, endOfMonth],
                 },
             },
-            include: [Category], // нужно для name и icon
+            include: [Category],
         });
 
         if (!transactions || transactions.length === 0) {
             return res.status(404).json({ message: "Нет транзакций за этот месяц" });
         }
 
-        // Агрегация только по расходам (отрицательные числа)
+        // 1. Агрегируем только расходы
         const aggregated: { [key: number]: { categoryId: number, color: string, name: string, icon: string, value: number } } = {};
 
         transactions.forEach(t => {
@@ -127,10 +127,29 @@ router.get("/now-month/:ownerId", authMiddleware, async (req, res) => {
             if (!aggregated[cat.id]) {
                 aggregated[cat.id] = { categoryId: cat.id, color: cat.color, name: cat.name, icon: cat.icon, value: 0 };
             }
-            aggregated[cat.id].value += t.count; // здесь value будет отрицательным
+            aggregated[cat.id].value += t.count; // value отрицательное
         });
 
-        return res.json(Object.values(aggregated));
+        // 2. Сортируем категории по абсолютной сумме расходов
+        const sorted = Object.values(aggregated).sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
+
+        // 3. Берем топ-5
+        const top5 = sorted.slice(0, 5);
+        const others = sorted.slice(5);
+
+        // 4. Объединяем все остальные в "📦 Другое"
+        if (others.length > 0) {
+            const otherValue = others.reduce((sum, c) => sum + c.value, 0);
+            top5.push({
+                categoryId: 0,
+                name: "📦 Другое",
+                color: "#ffffff",
+                icon: "",
+                value: otherValue,
+            });
+        }
+
+        return res.json(top5);
 
     } catch (error) {
         console.error(error);
@@ -201,7 +220,6 @@ router.get("/all-value/:ownerId", authMiddleware, async (req, res) => {
             return res.status(400).json({ message: "Неверно передан параметр ownerId" });
         }
 
-        // Названия месяцев на русском
         const monthNames = [
             "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
             "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
@@ -211,13 +229,11 @@ router.get("/all-value/:ownerId", authMiddleware, async (req, res) => {
             where: { ownerId },
         });
 
-        // Создаём объект с нулями для всех месяцев
         const aggregated: { [key: number]: number } = {};
         monthNames.forEach((_, index) => {
             aggregated[index] = 0;
         });
 
-        // Суммируем расходы
         transactions.forEach(t => {
             const amount = Number(t.count);
             if (isNaN(amount) || amount >= 0) return;
@@ -226,10 +242,9 @@ router.get("/all-value/:ownerId", authMiddleware, async (req, res) => {
             aggregated[monthIndex] += Math.abs(amount);
         });
 
-        // Переводим в массив
         const result = monthNames.map((month, index) => ({
             month,
-            value: aggregated[index] // будет 0, если нет транзакций
+            value: aggregated[index]
         }));
 
         return res.json(result);
@@ -278,7 +293,6 @@ router.get("/all/:ownerId", async (req, res) => {
     }
 });
 
-
 router.get("/:month/:ownerId", authMiddleware, async (req, res) => {
     try {
         const month = Number(req.params.month);
@@ -295,7 +309,6 @@ router.get("/:month/:ownerId", authMiddleware, async (req, res) => {
         const year = new Date().getFullYear();
 
         const startOfMonth = new Date(year, month - 1, 1, 0, 0, 0, 0);
-
         const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
 
         const transactions = await Transaction.findAll({
@@ -312,33 +325,39 @@ router.get("/:month/:ownerId", authMiddleware, async (req, res) => {
             return res.status(404).json({ message: "Нет транзакций за этот месяц" });
         }
 
-        const aggregated: {
-            [key: number]: {
-                categoryId: number,
-                color: string,
-                name: string,
-                icon: string,
-                value: number
-            }
-        } = {};
+        // 1. Агрегируем только расходы
+        const aggregated: { [key: number]: { categoryId: number, color: string, name: string, icon: string, value: number } } = {};
 
         transactions.forEach(t => {
-            if (t.count >= 0) return;
+            if (t.count >= 0) return; // пропускаем доходы
 
             const cat = t.category;
             if (!aggregated[cat.id]) {
-                aggregated[cat.id] = {
-                    categoryId: cat.id,
-                    color: cat.color,
-                    name: cat.name,
-                    icon: cat.icon,
-                    value: 0
-                };
+                aggregated[cat.id] = { categoryId: cat.id, color: cat.color, name: cat.name, icon: cat.icon, value: 0 };
             }
-            aggregated[cat.id].value += t.count;
+            aggregated[cat.id].value += t.count; // value отрицательное
         });
 
-        return res.json(Object.values(aggregated));
+        // 2. Сортируем по абсолютной сумме расходов
+        const sorted = Object.values(aggregated).sort((a, b) => Math.abs(b.value) - Math.abs(a.value));
+
+        // 3. Берем топ-5
+        const top5 = sorted.slice(0, 5);
+        const others = sorted.slice(5);
+
+        // 4. Объединяем все остальные в "📦 Другое"
+        if (others.length > 0) {
+            const otherValue = others.reduce((sum, c) => sum + c.value, 0);
+            top5.push({
+                categoryId: 0,
+                name: "📦 Другое",
+                color: "#ffffff",
+                icon: "",
+                value: otherValue,
+            });
+        }
+
+        return res.json(top5);
 
     } catch (error) {
         console.error(error);
@@ -346,26 +365,5 @@ router.get("/:month/:ownerId", authMiddleware, async (req, res) => {
     }
 });
 
-router.get("/:id", async(req, res) => {
-    try {
-        const id = Number(req.params.id)
-
-        if (!id) 
-            return res.status(400).json({ message: "Не верно передан параметр id"})
-        
-        const transaction = await Transaction.findByPk(id, {
-            include: [Category],
-        });
-
-        if (!transaction) {
-            return res.status(404).json({ message: "Задачи не найдены" });
-        }
-
-        res.json(transaction);
-    } catch (error: unknown) {
-        console.error(error)
-        res.status(500).json({ error })
-    }
-})
 
 export default router
