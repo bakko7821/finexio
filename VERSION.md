@@ -228,3 +228,13 @@ npm install sequelize-typescript
 
 - В **DashBoard.tsx** теперь выводяться последние 5 транзакций
 - Стили для компонента TransactionComponents.tsx, перенесены из TransactionsPage.scss в TransactionComponent.scss
+
+# commit 15.21.1
+
+### Серверная часть
+
+- Добавлена функция обновления баланса после добавления транзакции
+
+### Клиентская часть
+
+- Лайв отрисовка изменения баланса

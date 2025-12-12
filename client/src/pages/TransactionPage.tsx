@@ -40,11 +40,8 @@ export const TransactionPage = () => {
 
     useEffect(() => {
         dispatch(fetchTransactions(userId));
+        fetchUser(userId);
     }, []);
-
-    useEffect(() => {
-        fetchUser(userId)
-    }, [])
 
     const fetchUser = async(id: number) => {
         const response = await axios.get(`http://localhost:5000/api/users/${id}`);
@@ -54,6 +51,10 @@ export const TransactionPage = () => {
 
     const transactionsByMonth = useAppSelector((s) => s.transactions.byMonth);
     const months = Object.keys(transactionsByMonth).sort((a, b) => b.localeCompare(a));
+
+    useEffect(() => {
+        fetchUser(userId);
+    }, [transactionsByMonth])
 
     function formatMonth(key: string) {
         const [year, month] = key.split("-");

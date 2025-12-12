@@ -4,29 +4,61 @@ import { sequelize } from "../config/db";
 import { Category } from "../models/Category";
 import authMiddleware from "../middleware/authMiddleware";
 import { Op } from "sequelize";
+import { User } from "../models/User";
 
 const router = Router();
 
 sequelize.addModels([Transaction]);
 
-router.post("/add", async(req, res) => {
+router.post("/add", async (req, res) => {
     try {
-        const {ownerId, name, categoryId, count} = req.body;
+        const { ownerId, name, categoryId, count } = req.body;
 
-        if (!ownerId || !categoryId) 
-            return res.status(400).json({ message: "Не верно выбрана категория или пользователь не авторизован" });
+        if (!ownerId || !categoryId) {
+            return res.status(400).json({
+                message: "Не верно выбрана категория или пользователь не авторизован"
+            });
+        }
 
-        if (!name || !count)
-            return res.status(400).json({ message: "Введите название и укажите сумму"})
+        if (!name || typeof count !== "number") {
+            return res.status(400).json({
+                message: "Введите название и укажите сумму"
+            });
+        }
 
-        const transaction = Transaction.create({ownerId, name, categoryId, count})
+        const user = await User.findByPk(Number(ownerId));
+        if (!user) {
+            return res.status(404).json({ message: "Пользователь не найден" });
+        }
 
-        return res.json({ message: "Транзакция добавлена", transaction });
-    } catch (error: unknown) {
-        console.error(error)
-        res.status(500).json({ error })
+        user.balance += count;
+        await user.save();
+
+        const transaction = await Transaction.create({
+            ownerId,
+            name,
+            categoryId,
+            count
+        });
+
+        const fullTransaction = await Transaction.findByPk(transaction.id, {
+            include: {
+                model: Category,
+                attributes: ["id", "name", "color", "icon"]
+            }
+        });
+
+        return res.json({
+            message: "Транзакция добавлена",
+            balance: user.balance,
+            transaction: fullTransaction
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Ошибка сервера" });
     }
-})
+});
 
 router.delete("/delete/:id", authMiddleware, async (req, res) => {
     const userId = (req as any).user.id;

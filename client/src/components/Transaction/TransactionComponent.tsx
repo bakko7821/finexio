@@ -10,6 +10,7 @@ export interface TransactionProps {
 
 export const TransactionComponent = ({transaction}: TransactionProps) => {
     const [isOpen, setIsOpen] = useState(false)
+    const [categoryColor, setCategoryColor] = useState('')
     const dispatch = useAppDispatch();
 
     const countClass = transaction.count > 0 ? "positive"
@@ -51,6 +52,7 @@ export const TransactionComponent = ({transaction}: TransactionProps) => {
     };
 
     function hexToRgb(hex: string) {
+        if (!hex) return "0, 0, 0";
         const stripped = hex.replace("#", "");
 
         const bigint = parseInt(stripped, 16);
@@ -61,12 +63,18 @@ export const TransactionComponent = ({transaction}: TransactionProps) => {
         return `${r}, ${g}, ${b}`;
     }
 
+    useEffect(() => {
+        if (!transaction.category?.color) return;
+
+        setCategoryColor(hexToRgb(transaction.category.color))
+    }, [transaction])
+
     return (
         <div ref={transactionRef} className="transaction flex-column g4" key={transaction.id} onClick={() => handleHideMenu()}>
             <div 
                 className="transactionContent flex-between"
                 style={{
-                    boxShadow: `0px 0px 10px 1px rgba(${hexToRgb(transaction.category.color)}, 0.3) inset`,
+                    boxShadow: `0px 0px 10px 1px rgba(${categoryColor}, 0.3) inset`,
                 }}>
                 <div 
                 className="transactionInfo flex g8">
