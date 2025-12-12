@@ -28,66 +28,6 @@ router.post("/add", async(req, res) => {
     }
 })
 
-router.get("/:id", async(req, res) => {
-    try {
-        const id = Number(req.params.id)
-
-        if (!id) 
-            return res.status(400).json({ message: "Не верно передан параметр id"})
-        
-        const transaction = await Transaction.findByPk(id, {
-            include: [Category],
-        });
-
-        if (!transaction) {
-            return res.status(404).json({ message: "Задачи не найдены" });
-        }
-
-        res.json(transaction);
-    } catch (error: unknown) {
-        console.error(error)
-        res.status(500).json({ error })
-    }
-})
-
-router.get("/all/:ownerId", async (req, res) => {
-    try {
-        const ownerId = Number(req.params.ownerId);
-
-        if (!ownerId) {
-            return res.status(400).json({
-                message: "Не верно передан параметр ownerId"
-            });
-        }
-
-        const transactions = await Transaction.findAll({
-            where: { ownerId },
-            include: [Category],
-            order: [["createdAt", "DESC"]],
-        });
-
-
-        if (!transactions || transactions.length === 0) {
-            return res.status(404).json({
-                message: "Транзакции не найдены или отсутствуют"
-            });
-        }
-
-        const grouped = transactions.reduce((acc: any, t: any) => {
-            const monthKey = t.createdAt.toISOString().slice(0, 7);
-            if (!acc[monthKey]) acc[monthKey] = [];
-            acc[monthKey].push(t);
-            return acc;
-        }, {});
-
-        res.json(grouped);
-
-    } catch (error: unknown) {
-        console.error(error);
-        res.status(500).json({ error });
-    }
-});
-
 router.delete("/delete/:id", authMiddleware, async (req, res) => {
     const userId = (req as any).user.id;
 
@@ -221,28 +161,109 @@ router.get("/last-and-now/:ownerId", authMiddleware, async (req, res) => {
     }
 });
 
-
-router.get("/:month/:id", authMiddleware, async (req, res) => {
+router.get("/all-value/:ownerId", authMiddleware, async (req, res) => {
     try {
-        const ownerId = Number(req.params.id);
-        const month = Number(req.params.month); // 1–12
+        const ownerId = Number(req.params.ownerId);
+
+        if (!ownerId) {
+            return res.status(400).json({ message: "Неверно передан параметр ownerId" });
+        }
+
+        // Названия месяцев на русском
+        const monthNames = [
+            "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+            "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+        ];
+
+        const transactions = await Transaction.findAll({
+            where: { ownerId },
+        });
+
+        // Создаём объект с нулями для всех месяцев
+        const aggregated: { [key: number]: number } = {};
+        monthNames.forEach((_, index) => {
+            aggregated[index] = 0;
+        });
+
+        // Суммируем расходы
+        transactions.forEach(t => {
+            const amount = Number(t.count);
+            if (isNaN(amount) || amount >= 0) return;
+
+            const monthIndex = new Date(t.createdAt).getMonth();
+            aggregated[monthIndex] += Math.abs(amount);
+        });
+
+        // Переводим в массив
+        const result = monthNames.map((month, index) => ({
+            month,
+            value: aggregated[index] // будет 0, если нет транзакций
+        }));
+
+        return res.json(result);
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Ошибка сервера" });
+    }
+});
+
+router.get("/all/:ownerId", async (req, res) => {
+    try {
+        const ownerId = Number(req.params.ownerId);
 
         if (!ownerId) {
             return res.status(400).json({
-                message: "Неверно передан параметр id (ownerId)",
+                message: "Не верно передан параметр ownerId"
             });
         }
 
-        if (!month || month < 1 || month > 12) {
-            return res.status(400).json({
-                message: "Параметр month должен быть числом от 1 до 12",
+        const transactions = await Transaction.findAll({
+            where: { ownerId },
+            include: [Category],
+            order: [["createdAt", "DESC"]],
+        });
+
+
+        if (!transactions || transactions.length === 0) {
+            return res.status(404).json({
+                message: "Транзакции не найдены или отсутствуют"
             });
         }
 
-        const now = new Date();
-        const year = now.getFullYear(); // Можно потом расширить на выбор года
+        const grouped = transactions.reduce((acc: any, t: any) => {
+            const monthKey = t.createdAt.toISOString().slice(0, 7);
+            if (!acc[monthKey]) acc[monthKey] = [];
+            acc[monthKey].push(t);
+            return acc;
+        }, {});
+
+        res.json(grouped);
+
+    } catch (error: unknown) {
+        console.error(error);
+        res.status(500).json({ error });
+    }
+});
+
+
+router.get("/:month/:ownerId", authMiddleware, async (req, res) => {
+    try {
+        const month = Number(req.params.month);
+        const ownerId = Number(req.params.ownerId);
+
+        if (!ownerId || isNaN(month)) {
+            return res.status(400).json({ message: "Неверные параметры" });
+        }
+
+        if (month < 1 || month > 12) {
+            return res.status(400).json({ message: "Месяц должен быть от 1 до 12" });
+        }
+
+        const year = new Date().getFullYear();
 
         const startOfMonth = new Date(year, month - 1, 1, 0, 0, 0, 0);
+
         const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999);
 
         const transactions = await Transaction.findAll({
@@ -253,21 +274,66 @@ router.get("/:month/:id", authMiddleware, async (req, res) => {
                 },
             },
             include: [Category],
-            order: [["createdAt", "DESC"]],
         });
 
         if (!transactions || transactions.length === 0) {
-            return res.status(404).json({
-                message: "Транзакции за этот месяц не найдены",
-            });
+            return res.status(404).json({ message: "Нет транзакций за этот месяц" });
         }
 
-        return res.json(transactions);
+        const aggregated: {
+            [key: number]: {
+                categoryId: number,
+                color: string,
+                name: string,
+                icon: string,
+                value: number
+            }
+        } = {};
+
+        transactions.forEach(t => {
+            if (t.count >= 0) return;
+
+            const cat = t.category;
+            if (!aggregated[cat.id]) {
+                aggregated[cat.id] = {
+                    categoryId: cat.id,
+                    color: cat.color,
+                    name: cat.name,
+                    icon: cat.icon,
+                    value: 0
+                };
+            }
+            aggregated[cat.id].value += t.count;
+        });
+
+        return res.json(Object.values(aggregated));
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: "Ошибка сервера" });
     }
 });
 
+router.get("/:id", async(req, res) => {
+    try {
+        const id = Number(req.params.id)
+
+        if (!id) 
+            return res.status(400).json({ message: "Не верно передан параметр id"})
+        
+        const transaction = await Transaction.findByPk(id, {
+            include: [Category],
+        });
+
+        if (!transaction) {
+            return res.status(404).json({ message: "Задачи не найдены" });
+        }
+
+        res.json(transaction);
+    } catch (error: unknown) {
+        console.error(error)
+        res.status(500).json({ error })
+    }
+})
 
 export default router

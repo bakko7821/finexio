@@ -28,8 +28,20 @@
     }
 }
 
+.barCharts {
+    width: 100%;
+    max-height: 400px;
+    background-color: $background-card-color;
+    padding: 16px;
+    border-radius: 32px;
+}
+
 .titleText {
     color: $main-text-color;
     font-size: $rem1_5;
     font-weight: 500;
+}
+
+.chart.bar {
+    width: 100%;
 }
