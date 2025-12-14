@@ -1,0 +1,71 @@
+@use './variables' as *;
+
+.main_content.categories {
+    .categoriesBox {
+        padding: 16px;
+        background-color: $background-card-color;
+        width: 100%;
+        flex-wrap: wrap;
+        border-radius: 28px;
+
+        .category.active {
+            background-color: $background-color;
+            
+            span {
+                color: $second-text-color;
+            }
+        }
+    }
+
+    .changeCategoryForm {
+        width: fit-content;
+        height: fit-content;
+        align-items: start;
+        padding: 16px;
+        border-radius: 28px;
+
+        input {
+            align-items: center;
+            background-color: $background-color;
+            color: $main-text-color;
+            font-size: $rem1_5;
+            line-height: 1.4;
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .buttonsBox {
+            width: 100%;
+
+            button {
+                font-size: $rem1;
+                font-weight: 500;
+                padding: 12px;
+                border-radius: 12px;
+                color: $main-text-color;
+            }
+
+            .saveChangesButton {
+                background-color: $background-color;
+                width: 100%;
+                transition: background-color 0.5s;
+
+                &:hover {
+                    background-color: $main-color;
+                }
+            }
+
+            .deleteButton {
+                background-color: rgba($color: $red, $alpha: 0.3);
+                color: $red;
+
+                &:hover {
+                    svg {
+                        transform: rotate(30deg);
+                    }
+                }
+            }
+        }
+    }
+}
+

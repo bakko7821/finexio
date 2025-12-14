@@ -61,36 +61,6 @@
         flex-wrap: wrap;
     }
 
-    .category {
-        background-color: $background-color;
-        padding: 4px 12px;
-        border-radius: 12px;
-        width: fit-content;
-        cursor: pointer;
-        transition: all 0.5s;
-
-        span {
-            transition: all 0.5s;
-            color: $second-text-color;
-        }
-
-        &:hover {
-            background-color: $main-color-hover;
-            
-            span {
-                color: $background-card-color;
-            }
-        }
-    }
-
-    .category.active {
-        background-color: $main-color;
-        
-        span {
-            color: $background-card-color;
-        }
-    }
-
     .createNewCategoryInput {
         align-items: center;
         border-radius: 12px;

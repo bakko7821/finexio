@@ -50,9 +50,7 @@ export const NewTransactionForm = () => {
             console.log("Неверная сумма");
             return;
         }
-
-        console.log(selectedCategory)
-
+        
         dispatch(postTransaction({
             ownerId: userId,
             name,

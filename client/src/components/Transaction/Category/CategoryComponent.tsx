@@ -1,8 +1,9 @@
 import { useAppDispatch, useAppSelector } from "../../../store/hooks"; 
 import type { Category } from "../../../pages/TransactionPage";
 import { selectCategory } from "../../../store/slices/categoriesSlice";
+import '../../../styles/CategoryComponent.scss'
 
-interface CategoryComponentProps {
+export interface CategoryComponentProps {
     category: Category;
 }
 

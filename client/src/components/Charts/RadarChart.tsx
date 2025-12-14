@@ -40,14 +40,14 @@ export const RadarCharts = () => {
                             label: "Расходы текущего месяца",
                             data: thisMonthData,
                             fill: true,
-                            backgroundColor: "rgba(255, 99, 132, 0.2)", // красный
+                            backgroundColor: "rgba(255, 99, 132, 0.2)",
                             borderColor: "rgb(255, 99, 132)"
                         },
                         {
                             label: "Расходы прошлого месяца",
                             data: lastMonthData,
                             fill: true,
-                            backgroundColor: "rgba(54, 162, 235, 0.2)", // синий
+                            backgroundColor: "rgba(54, 162, 235, 0.2)",
                             borderColor: "rgb(54, 162, 235)"
                         }
                     ]
@@ -72,13 +72,13 @@ export const RadarCharts = () => {
                         scales: {
                             r: {
                                 angleLines: {
-                                    display: true,       // линии от центра к вершинам
-                                    color: "rgba(255, 255, 255, 0.1)" // цвет этих линий
+                                    display: true,
+                                    color: "rgba(255, 255, 255, 0.1)"
                                 },
                                 grid: {
-                                    circular: true,      // делает круги, а не квадраты
-                                    color: "rgba(255, 255, 255, 0.05)", // цвет паутинки
-                                    lineWidth: 1         // толщина линий
+                                    circular: true,
+                                    color: "rgba(255, 255, 255, 0.05)",
+                                    lineWidth: 1
                                 },
                                 pointLabels: {
                                     font: {

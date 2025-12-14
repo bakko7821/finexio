@@ -21,13 +21,8 @@ export const DoughnutChart = ({ data }: DoughnutChartProps) => {
         if (!canvasRef.current) return;
         if (!data || data.length === 0) return;
 
-        // labels = имена категорий
         const labels = data.map((item) => item.name);
-
-        // values = абсолютные значения расходов
         const values = data.map((item) => Math.abs(item.value));
-
-        // colors = массив hex цветов
         const colors = data.map((item) => item.color);
 
         const doughnutData: ChartData<"doughnut"> = {

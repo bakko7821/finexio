@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom"
 import AuthLayout from "./layouts/AuthLayout"
 import MainLayout from "./layouts/MainLayout"
 import { DashboardPage } from "../pages/DashboardPage"
-import { AccountPage } from "../pages/AccountPage"
+import { CategoriesPage } from "../pages/CategoriesPage"
 import { TransactionPage } from "../pages/TransactionPage"
 import { LoginPage } from "../pages/Auth/LoginPage"
 import { RegisterPage } from "../pages/Auth/RegisterPage"
@@ -17,7 +17,7 @@ function App() {
 
       <Route element={<MainLayout />}>
         <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/account" element={<AccountPage />} />
+        <Route path="/categories" element={<CategoriesPage />} />
         <Route path="/transactions" element={<TransactionPage />} />
       </Route>
     </Routes>
