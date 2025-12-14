@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import type { Category } from "../../pages/TransactionPage";
 import { color } from "chart.js/helpers";
+import api from "../../utils/api";
 
 interface CategoriesState {
     list: Category[];
@@ -16,7 +16,7 @@ const initialState: CategoriesState = {
 export const fetchCategories = createAsyncThunk(
     "categories/fetch",
     async (userId: number) => {
-        const response = await axios.get(`http://localhost:5000/api/categories/all/${userId}`);
+        const response = await api.get(`/categories/all/${userId}`);
         return response.data;
     }
 );
@@ -30,7 +30,7 @@ export const createCategory = createAsyncThunk<
 >(
     "categories/create",
     async ({ ownerId, icon, name, color }) => {
-        const response = await axios.post("http://localhost:5000/api/categories/add", {
+        const response = await api.post("/categories/add", {
             ownerId,
             icon,
             name,
@@ -41,7 +41,25 @@ export const createCategory = createAsyncThunk<
     }
 );
 
+export const updateCategory = createAsyncThunk<
+    Category,
+    {
+        id: number;
+        icon: string;
+        name: string;
+        color: string;
+    }
+>(
+    "categories/update",
+    async ({ id, icon, name, color }) => {
+        const response = await api.put(
+            `/categories/${id}`,
+            { icon, name, color }
+        );
 
+        return response.data;
+    }
+);
 
 const categoriesSlice = createSlice({
     name: "categories",
@@ -53,12 +71,26 @@ const categoriesSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-        .addCase(fetchCategories.fulfilled, (state, action) => {
-            state.list = action.payload;
-        })
-        .addCase(createCategory.fulfilled, (state, action) => {
-            state.list.push(action.payload);
-        });
+            .addCase(fetchCategories.fulfilled, (state, action) => {
+                state.list = action.payload;
+            })
+            .addCase(createCategory.fulfilled, (state, action) => {
+                state.list.push(action.payload);
+            })
+            .addCase(updateCategory.fulfilled, (state, action) => {
+                const updated = action.payload;
+
+                // обновляем список
+                const index = state.list.findIndex(c => c.id === updated.id);
+                if (index !== -1) {
+                    state.list[index] = updated;
+                }
+
+                // обновляем выбранную категорию, если она выбрана
+                if (state.selectedCategory?.id === updated.id) {
+                    state.selectedCategory = updated;
+                }
+            });
     }
 });
 

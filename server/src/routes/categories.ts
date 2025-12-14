@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { sequelize } from "../config/db";
 import { Category } from "../models/Category";
+import authMiddleware from "../middleware/authMiddleware";
 
 const router = Router();
 
@@ -27,6 +28,36 @@ router.post("/add",  async(req, res) => {
         res.status(500).json({ error })
     }
 })
+
+router.put("/:id", authMiddleware, async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const { icon, name, color } = req.body;
+        const userId = (req as any).user.id;
+
+        const category = await Category.findByPk(id);
+
+        if (!category) {
+            return res.status(404).json({ message: "Категория не найдена" });
+        }
+
+        if (category.ownerId !== userId) {
+            return res.status(403).json({ message: "Нет прав на изменение категории" });
+        }
+
+        await category.update({
+            icon,
+            name,
+            color,
+        });
+
+        return res.json(category);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Ошибка сервера" });
+    }
+});
+
 
 router.get("/:id", async(req, res) => {
     try {

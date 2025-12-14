@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
 import type { Transaction } from "../../pages/TransactionPage";
+import api from "../../utils/api";
 
 interface TransactionState {
     byMonth: Record<string, Transaction[]>;
@@ -20,10 +20,7 @@ export const fetchTransactions = createAsyncThunk(
     async (ownerId: number, { rejectWithValue }) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.get(
-                `http://localhost:5000/api/transactions/all/${ownerId}`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
+            const response = await api.get(`/transactions/all/${ownerId}`);
             return response.data;
         } catch (err: any) {
             return rejectWithValue(err.response?.data?.message || "Ошибка сервера");
@@ -40,10 +37,9 @@ export const postTransaction = createAsyncThunk(
     ) => {
         try {
             const token = localStorage.getItem("token");
-            const response = await axios.post(
-                "http://localhost:5000/api/transactions/add",
-                { ownerId, name, categoryId, count },
-                { headers: { Authorization: `Bearer ${token}` } }
+            const response = await api.post(
+                "/transactions/add",
+                { ownerId, name, categoryId, count }
             );
 
             return response.data; // 🌟 возвращаем Transaction
@@ -59,13 +55,9 @@ export const deleteTransaction = createAsyncThunk(
     "transactions/delete",
     async ({ id }: { id: number }, { rejectWithValue }) => {
         try {
-            const token = localStorage.getItem("token");
-            await axios({
+            await api({
                 method: "delete",
-                url: `http://localhost:5000/api/transactions/delete/${id}`,
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                }
+                url: `/transactions/delete/${id}`,
             });
 
             return id;

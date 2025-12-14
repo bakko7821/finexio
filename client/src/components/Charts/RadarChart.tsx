@@ -1,6 +1,6 @@
-import axios from "axios";
 import { Chart, type ChartData } from "chart.js/auto";
 import { useEffect, useRef } from "react";
+import api from "../../utils/api";
 
 export const RadarCharts = () => {
     const userId = Number(localStorage.getItem("userId"));
@@ -13,9 +13,7 @@ export const RadarCharts = () => {
             if (!canvasRef.current) return;
 
             try {
-                const response = await axios.get(`http://localhost:5000/api/transactions/last-and-now/${userId}`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const response = await api.get(`/transactions/last-and-now/${userId}`);
 
                 const { thisMonth, lastMonth } = response.data;
 

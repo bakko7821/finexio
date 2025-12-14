@@ -14,7 +14,10 @@ export const CategoriesPage = () => {
                 <AllCategories />
             </div>
             {selected !== null
-            ? <EditCategoryForm />
+            ? <div className="editCategoryForm flex-column g16">
+                <span className="titleText rem1_5">Изменение категории</span>
+                <EditCategoryForm />
+            </div>
             : null}
         </div>
     )

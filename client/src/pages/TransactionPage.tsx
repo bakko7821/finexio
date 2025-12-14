@@ -6,7 +6,7 @@ import { AddTransactionDropDownMenu } from "../components/Transaction/AddTransac
 import { fetchTransactions } from "../store/slices/transactionSlice";
 import { toggleAddTransaction } from "../store/slices/uiSlice";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import axios from "axios";
+import api from "../utils/api";
 
 export interface Transaction {
     [x: string]: any;
@@ -44,7 +44,7 @@ export const TransactionPage = () => {
     }, []);
 
     const fetchUser = async(id: number) => {
-        const response = await axios.get(`http://localhost:5000/api/users/${id}`);
+        const response = await api.get(`/users/${id}`);
 
         setUser(response.data)
     }

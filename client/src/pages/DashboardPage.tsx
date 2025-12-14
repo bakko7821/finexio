@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react'
 import '../styles/DashboardPage.scss'
-import axios from 'axios'
 import { DoughnutChart, type CategoryItem } from '../components/Charts/DoughnutChart'
 import { BarCharts } from '../components/Charts/BarChart'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
 import { TransactionComponent } from '../components/Transaction/TransactionComponent'
 import type { Transaction } from './TransactionPage'
 import { fetchTransactions } from '../store/slices/transactionSlice'
+import api from '../utils/api'
 
 export const DashboardPage = () => {
-    const token = localStorage.getItem("token")
     const userId = Number(localStorage.getItem("userId"))
     const dispatch = useAppDispatch();
 
@@ -27,18 +26,14 @@ export const DashboardPage = () => {
     const currentMonthName = monthNames[today.getMonth()];
 
     async function fetchDataOnMonth(monthNumber: number, id: number) {
-        const response = await axios.get(`http://localhost:5000/api/transactions/${monthNumber}/${id}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await api.get(`/transactions/${monthNumber}/${id}`);
 
         console.log(response.data)
         return response.data
     }
     
     async function fetchDataAllMonth(id: number) {
-        const response = await axios.get(`http://localhost:5000/api/transactions/all-value/${id}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await api.get(`/transactions/all-value/${id}`);
 
         console.log(response.data)
         return response.data
