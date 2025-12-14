@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { sequelize } from "../config/db";
 import { Category } from "../models/Category";
+import { Transaction } from "../models/Transaction";
 import authMiddleware from "../middleware/authMiddleware";
 
 const router = Router();
@@ -52,12 +53,40 @@ router.put("/:id", authMiddleware, async (req, res) => {
         });
 
         return res.json(category);
-    } catch (error) {
+    } catch (error: unknown) {
         console.error(error);
         res.status(500).json({ error: "Ошибка сервера" });
     }
 });
 
+router.delete("/:id", authMiddleware, async (req, res) => {
+    try {
+        const id = Number(req.params.id);
+        const userId = (req as any).user.id;
+
+        const category = await Category.findOne({ where: { id } });
+        if (!category) return res.status(404).json({ message: "Категория не найдена" });
+        if (category.ownerId !== userId) return res.status(403).json({ message: "Нет прав на удаление" });
+
+        const [placeholderCategory] = await Category.findOrCreate({
+            where: { name: "Удалённая категория" },
+            defaults: { icon: "❓", color: "#ff0000ff", ownerId: userId }
+        });
+
+        await (Transaction as any).update(
+            { categoryId: placeholderCategory.id },
+            { where: { categoryId: id } }
+        );
+
+        await category.destroy();
+
+        return res.json({ message: "Категория успешно удалена" });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Ошибка сервера" });
+    }
+});
 
 router.get("/:id", async(req, res) => {
     try {

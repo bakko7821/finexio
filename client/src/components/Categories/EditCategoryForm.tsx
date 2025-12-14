@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { TrashIcon } from "../../assets/icons"
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { updateCategory } from "../../store/slices/categoriesSlice";
+import { deleteCategory, updateCategory } from "../../store/slices/categoriesSlice";
 
 export const EditCategoryForm = () => {
     const category = useAppSelector(s => s.categories.selectedCategory);
@@ -33,6 +33,12 @@ export const EditCategoryForm = () => {
         }));
     }
 
+    const handleDeleteCategory = () => {
+        if (!category) return;
+
+        dispatch(deleteCategory(category.id));
+    }
+
     return <form onSubmit={handleFormSubmit} className="changeCategoryForm flex-column g8">
         <input 
             type="text" 
@@ -50,7 +56,7 @@ export const EditCategoryForm = () => {
             />
         <div className="buttonsBox flex-center g8">
             <button type="submit" className="saveChangesButton flex-center">Сохранить изменения</button>
-            <button type="button" className="deleteButton flex-center"><TrashIcon /></button>
+            <button type="button" className="deleteButton flex-center" onClick={handleDeleteCategory}><TrashIcon /></button>
         </div>
     </form>
 }

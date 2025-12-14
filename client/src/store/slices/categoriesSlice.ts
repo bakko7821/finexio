@@ -61,6 +61,17 @@ export const updateCategory = createAsyncThunk<
     }
 );
 
+export const deleteCategory = createAsyncThunk<
+    number,              // что вернём
+    number               // что принимаем (id категории)
+>(
+    "categories/delete",
+    async (id) => {
+        await api.delete(`/categories/${id}`);
+        return id; // 👈 возвращаем id удалённой категории
+    }
+);
+
 const categoriesSlice = createSlice({
     name: "categories",
     initialState,
@@ -89,6 +100,15 @@ const categoriesSlice = createSlice({
                 // обновляем выбранную категорию, если она выбрана
                 if (state.selectedCategory?.id === updated.id) {
                     state.selectedCategory = updated;
+                }
+            })
+            .addCase(deleteCategory.fulfilled, (state, action) => {
+                const deletedId = action.payload;
+
+                state.list = state.list.filter(c => c.id !== deletedId);
+
+                if (state.selectedCategory?.id === deletedId) {
+                    state.selectedCategory = null;
                 }
             });
     }
