@@ -26,22 +26,22 @@ export const BarCharts = ({ data }: BarChartsProps) => {
             datasets: [{
                 label: "Расходы",
                 data: values,
-                backgroundColor: "rgba(106, 168, 249, 0.3)", // синий
+                backgroundColor: "rgba(106, 168, 249, 0.3)",
                 borderColor: "rgba(106, 168, 249, 1)",
                 borderWidth: 2,
-                borderRadius: 6, // скруглённые столбцы
+                borderRadius: 6,
             }],
         };
 
         const options = {
             responsive: true,
-            maintainAspectRatio: false, // канвас будет растягиваться под родительский блок
+            maintainAspectRatio: false,
             plugins: {
                 legend: { 
                     display: false,
                     labels: {
                         font: {
-                            size: 16 // размер шрифта легенды
+                            size: 16
                         }
                     }
                 },

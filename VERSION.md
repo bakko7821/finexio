@@ -291,3 +291,4 @@ npm install sequelize-typescript
 
 - На странице CategoriesPage.tsx - добавленна возможность создания новой категории
 - На странице DashboardPage.tsx - добавленна ссылка для открытия всех транзакций
+- Создан README.md
