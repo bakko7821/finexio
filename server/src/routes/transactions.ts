@@ -60,6 +60,37 @@ router.post("/add", async (req, res) => {
     }
 });
 
+router.put("/:id", authMiddleware, async (req, res) => {
+    const userId = (req as any).user.id;
+
+    try {
+        const transactionId = Number(req.params.id);
+        const { name, count } = req.body;
+
+        const transaction = await Transaction.findOne({
+            where: { id: transactionId }
+        });
+
+        if (!transaction) {
+            return res.status(404).json({ message: "Транзакция не найдена" });
+        }
+
+        if (transaction.ownerId !== userId) {
+            return res.status(403).json({ message: "Нет прав на удаление этой транзакции" });
+        }
+
+        await transaction.update({
+            name,
+            count,
+        });
+
+        return res.json(transaction);
+
+    } catch (error: unknown) {
+
+    }
+})
+
 router.delete("/delete/:id", authMiddleware, async (req, res) => {
     const userId = (req as any).user.id;
 

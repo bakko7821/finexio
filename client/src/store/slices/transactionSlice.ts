@@ -67,6 +67,25 @@ export const deleteTransaction = createAsyncThunk(
     }
 );
 
+export const updateTransaction = createAsyncThunk<
+    Transaction,
+    {
+        id: number;
+        name: string;
+        count: number;
+    }
+>(
+    "transactions/update",
+    async ({ id, name, count }) => {
+        const response = await api.put(
+            `/transactions/${id}`,
+            { name, count }
+        );
+
+        return response.data;
+    }
+);
+
 
 const transactionsSlice = createSlice({
     name: "transactions",
@@ -114,8 +133,38 @@ const transactionsSlice = createSlice({
                 for (const month in state.byMonth) {
                     state.byMonth[month] = state.byMonth[month].filter(tx => tx.id !== id);
                 }
+            })
+
+            // UPDATE (PUT)
+            .addCase(updateTransaction.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(updateTransaction.fulfilled, (state, action: PayloadAction<Transaction>) => {
+                state.loading = false;
+
+                const updatedTx = action.payload;
+
+                // проходим по всем месяцам
+                for (const month in state.byMonth) {
+                    const index = state.byMonth[month].findIndex(
+                        (tx) => tx.id === updatedTx.id
+                    );
+
+                    if (index !== -1) {
+                        state.byMonth[month][index] = {
+                            ...state.byMonth[month][index],
+                            ...updatedTx,
+                        };
+                        break; // нашли — дальше искать не нужно
+                    }
+                }
+            })
+            .addCase(updateTransaction.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload as string;
             });
-    },
+        }
 });
 
 

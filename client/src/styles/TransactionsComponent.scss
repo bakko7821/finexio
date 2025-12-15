@@ -16,12 +16,19 @@
             }
 
             .transactionInfo {
+                width: 100%;
                 align-items: center;
 
                 .transactionTextInfo {
+                    
                     .nameText {
+                        width: 100%;
                         color: $main-text-color;
                         font-weight: 400;
+                    }
+
+                    input.nameText {
+                        animation: pulse 1.5s ease-in-out infinite;
                     }
 
                     .categoryText {
@@ -32,7 +39,31 @@
             }
 
             .transactionCount {
+                min-width: fit-content;
                 font-weight: 500;
+            }
+
+            input.transactionCount {
+                text-align: end;
+                max-width: fit-content;
+                padding: 8px;
+                animation: pulse 1.5s ease-in-out infinite;
+            }
+
+            .handleSaveChangesButton {
+                padding: 8px;
+                border-radius: 8px;
+                color: #11FF00;
+                background-color: $background-color;
+                transition: background-color 0.5s;
+
+                &:hover {
+                    svg {
+                        transform: rotate(30deg);
+                    }
+
+                    background-color: $background-card-color;
+                }
             }
 
             .transactionCount.positive {
@@ -76,3 +107,17 @@
             }
         }
     }
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.2;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
