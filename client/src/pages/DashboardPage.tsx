@@ -7,6 +7,7 @@ import { TransactionComponent } from '../components/Transaction/TransactionCompo
 import type { Transaction } from './TransactionPage'
 import { fetchTransactions } from '../store/slices/transactionSlice'
 import api from '../utils/api'
+import { NavLink } from 'react-router-dom'
 
 export const DashboardPage = () => {
     const userId = Number(localStorage.getItem("userId"))
@@ -73,7 +74,10 @@ export const DashboardPage = () => {
                 </div>
             </div>
             <div className="lastTransactionsBox flex-column g16">
-                <span className='titleText'>Список последних транзакций</span>
+                <div className="headingBox flex-between">
+                    <span className='titleText'>Список последних транзакций</span>
+                    <NavLink to={'/transactions'}>Показать все</NavLink>
+                </div>
                 {months.length > 0 ? (
                     <div className="allTransactionsList flex-column g12">
                         {transactionsByMonth[months[0]]

@@ -286,3 +286,8 @@ npm install sequelize-typescript
 
 - Создан slice для изменения транзакции
 - Изменен transactionComponent.tsx - добавлен функционал кнопке редактирования
+
+# commit 19.27.1
+
+- На странице CategoriesPage.tsx - добавленна возможность создания новой категории
+- На странице DashboardPage.tsx - добавленна ссылка для открытия всех транзакций

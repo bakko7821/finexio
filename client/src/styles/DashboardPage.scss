@@ -59,3 +59,21 @@
 .chart.bar {
     width: 100%;
 }
+
+.lastTransactionsBox {
+    width: 100%;
+    
+    .headingBox {
+        align-items: center;
+
+        a {
+            font-weight: 500;
+            color: $main-color;
+            transition: color 0.5s;
+
+            &:hover {
+                color: $main-color-hover;
+            }
+        }
+    }
+}

@@ -1,6 +1,24 @@
 @use './variables' as *;
 
 .main_content.categories {
+    .allCategoriesBox {
+        .headingBox {
+            width: 100%;
+            align-items: center;
+
+            .createNewCategoryButton {
+                color: $main-color;
+                font-size: $rem1;
+                font-weight: 500;
+                transition: all 0.5s;
+
+                &:hover {
+                    color: $main-color-hover;
+                }
+            }
+        }
+    }
+
     .categoriesBox {
         padding: 16px;
         background-color: $background-card-color;

@@ -61,31 +61,6 @@
         flex-wrap: wrap;
     }
 
-    .createNewCategoryInput {
-        align-items: center;
-        border-radius: 12px;
-        background-color: $background-color;
-        padding: 4px 4px 4px 12px;
-
-        input {
-            color: $main-text-color;
-        }
-
-        button {
-            padding: 4px;
-            &:hover {
-                svg {
-                    transform: rotate(30deg);
-                    color: $main-color-hover;
-                }
-            }
-
-            svg {
-                color: $main-color;
-            }
-        }
-    }
-
     .addTransactionMenu {
         width: 100vw;
         height: 100vh;
